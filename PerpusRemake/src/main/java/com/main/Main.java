@@ -2,7 +2,6 @@ package com.main;
 
 import com.main.user.Admin;
 import com.main.user.Mahasiswa;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -54,13 +53,22 @@ public class Main extends Application {
         grid.add(actionTarget, 1, 6);
 
         btn.setOnAction(e -> {
-            if (userTextField.getText().equals("admin") && pwBox.getText().equals("password")) {
-                new Admin().showMenu(primaryStage);
+            if (userTextField.getText().equals("admin") && pwBox.getText().equals("admin")) {
+                try {
+                    // new Admin().showMenu(primaryStage);
+                    // Admin.adminMenu(primaryStage);
+                    Admin admin = new Admin();
+                    admin.showMenu(primaryStage);
+                } catch (Exception ex) {
+                    System.err.println("Error loading Admin menu: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
             } else {
                 actionTarget.setId("action-target");
                 actionTarget.setText("Invalid credentials");
             }
         });
+        
 
         Button backButton = new Button("Kembali");
         grid.add(backButton, 1, 7);
@@ -68,7 +76,7 @@ public class Main extends Application {
 
         // Mengatur scene dengan grid dan CSS
         Scene scene = new Scene(grid, 300, 275);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("resource/styles.css").toExternalForm());
         primaryStage.setScene(scene);
 
         primaryStage.show();
@@ -104,7 +112,10 @@ public class Main extends Application {
 
         btn.setOnAction(e -> {
             // Assume successful login for demo purposes
-            new Mahasiswa(nimTextField.getText()).showMenu(primaryStage);
+            // new Mahasiswa(nimTextField.getText()).showMenu(primaryStage);
+            String nim = nimTextField.getText();
+            Mahasiswa userMenu = new Mahasiswa(nim); // Inisialisasi objek UserMenu dengan NIM
+            userMenu.showMenu(primaryStage); // Memanggil metode showMenu
         });
 
         Button backButton = new Button("Kembali");
@@ -113,7 +124,10 @@ public class Main extends Application {
 
         // Mengatur scene dengan grid dan CSS
         Scene scene = new Scene(grid, 300, 200);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("resource/styles.css").toExternalForm());
+        // scene.getStylesheets().add("../resource/styles.css");
+        // scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
         primaryStage.setScene(scene);
 
         primaryStage.show();
@@ -146,7 +160,7 @@ public class Main extends Application {
 
         // Mengatur scene dengan grid dan CSS
         Scene scene = new Scene(grid, 300, 200);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("resource/styles.css").toExternalForm());
         primaryStage.setScene(scene);
 
         primaryStage.show();

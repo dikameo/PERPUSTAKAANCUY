@@ -2,7 +2,6 @@ package com.main.user;
 
 import com.main.Main;
 import com.main.inter.MenuInterface;
-
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -10,9 +9,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Admin implements MenuInterface{
+
     @Override
-    public void showMenu(Stage primaryStage) {
-        primaryStage.setTitle("Admin Menu");
+    public void showMenu(Stage stage) {
+        stage.setTitle("Admin Menu");
 
         // Membuat GridPane layout
         GridPane grid = new GridPane();
@@ -36,9 +36,12 @@ public class Admin implements MenuInterface{
 
         Button checkBookButton = new Button("Cek Buku");
         grid.add(checkBookButton, 1, 2);
-
+        
         Button logoutButton = new Button("Keluar");
         grid.add(logoutButton, 0, 3);
+        
+        Button givePenaltyButton = new Button("Sanksi Mahasiswa");
+        grid.add(givePenaltyButton, 1, 3);
 
         addStudentButton.setOnAction(e -> {
             // Placeholder: Ganti dengan fungsi atau tampilan yang sesuai
@@ -60,13 +63,21 @@ public class Admin implements MenuInterface{
             System.out.println("Cek Buku clicked");
         });
 
-        logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
+
+        givePenaltyButton.setOnAction(e -> {
+            // Placeholder: Ganti dengan fungsi atau tampilan yang sesuai
+            System.out.println("Cek Buku clicked");
+        });
+
+
+
+        logoutButton.setOnAction(e -> new Main().pilihanLogin(stage));
 
         // Mengatur scene dengan grid dan CSS
         Scene scene = new Scene(grid, 300, 200);
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
-        primaryStage.setScene(scene);
+        stage.setScene(scene);
 
-        primaryStage.show();
+        stage.show();
     }
 }
