@@ -1,14 +1,19 @@
 package com.main;
 
+import java.net.URL;
+
 import com.main.user.Admin;
 import com.main.user.Mahasiswa;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -23,40 +28,31 @@ public class Main extends Application {
     private void loginAdmin(Stage primaryStage) {
         primaryStage.setTitle("Admin Login Form");
 
-        // Membuat GridPane layout
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
-
-        // Menambahkan komponen ke GridPane
+        // Membuat komponen-komponen UI
         Text sceneTitle = new Text("Welcome Admin");
         sceneTitle.setId("welcome-text");
-        grid.add(sceneTitle, 0, 0, 2, 1);
-
-        Label userName = new Label("User Name:");
-        grid.add(userName, 0, 1);
-
+        
+        Label userName = new Label("Username:");
+        userName.setId("paragraph");
         TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 1);
-
+        userTextField.getStyleClass().add("text-field");
+    
+        
         Label pw = new Label("Password:");
-        grid.add(pw, 0, 2);
-
         PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 2);
-
+        pw.setId("paragraph");
+        pwBox.getStyleClass().add("text-field");
+        
         Button btn = new Button("Sign in");
-        grid.add(btn, 1, 4);
-
+        Button backButton = new Button("Kembali");
+        backButton.setId("btn-outline");
+        
         final Text actionTarget = new Text();
-        grid.add(actionTarget, 1, 6);
-
+        
+        // Mengatur aksi tombol Sign in
         btn.setOnAction(e -> {
             if (userTextField.getText().equals("admin") && pwBox.getText().equals("admin")) {
                 try {
-                    // new Admin().showMenu(primaryStage);
-                    // Admin.adminMenu(primaryStage);
                     Admin admin = new Admin();
                     admin.showMenu(primaryStage);
                 } catch (Exception ex) {
@@ -69,98 +65,131 @@ public class Main extends Application {
             }
         });
         
-
-        Button backButton = new Button("Kembali");
-        grid.add(backButton, 1, 7);
+        // Mengatur aksi tombol Kembali
         backButton.setOnAction(e -> pilihanLogin(primaryStage));
-
-        // Mengatur scene dengan grid dan CSS
-        Scene scene = new Scene(grid, 300, 275);
-        scene.getStylesheets().add(getClass().getResource("resource/styles.css").toExternalForm());
+        
+        // Mengatur tata letak komponen-komponen UI
+        HBox row1 = new HBox(10);
+        row1.setAlignment(Pos.CENTER);
+        row1.getChildren().addAll(userName, userTextField);
+        
+        HBox row2 = new HBox(10);
+        row2.setAlignment(Pos.CENTER);
+        row2.getChildren().addAll(pw, pwBox);
+        
+        VBox row3 = new VBox(10);
+        row3.setAlignment(Pos.CENTER);
+        row3.getChildren().addAll(btn,backButton);
+        
+        VBox layout = new VBox(20);
+        layout.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(sceneTitle, row1, row2, row3, actionTarget);
+        
+        // Mengatur scene dengan layout dan CSS
+        Scene scene = new Scene(layout, 570, 512);
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        
+        // Menampilkan stage
         primaryStage.setScene(scene);
-
         primaryStage.show();
+        
     }
 
 
     
-    private void loginMahasiswa(Stage primaryStage) {
-        primaryStage.setTitle("User Login Form");
+private void loginMahasiswa(Stage primaryStage) {
+    primaryStage.setTitle("User Login Form");
 
-        // Membuat GridPane layout
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
+    // Membuat komponen-komponen UI
+    Text sceneTitle = new Text("Selamat Datang Mahasiswa");
+    sceneTitle.setId("welcome-text");
 
-        // Menambahkan komponen ke GridPane
-        Text sceneTitle = new Text("Welcome User");
-        sceneTitle.setId("welcome-text");
-        grid.add(sceneTitle, 0, 0, 2, 1);
+    Label nimLabel = new Label("NIM:");
+    TextField nimTextField = new TextField();
+    nimTextField.getStyleClass().add("text-field");
 
-        Label nimLabel = new Label("NIM:");
-        grid.add(nimLabel, 0, 1);
+    Button btn = new Button("Login");
+    btn.setId("btn-login");
 
-        TextField nimTextField = new TextField();
-        grid.add(nimTextField, 1, 1);
+    Button backButton = new Button("Kembali");
+    backButton.setId("btn-outline");
 
-        Button btn = new Button("Login");
-        grid.add(btn, 1, 2);
 
-        final Text actionTarget = new Text();
-        grid.add(actionTarget, 1, 4);
+    final Text actionTarget = new Text();
 
-        btn.setOnAction(e -> {
-            // Assume successful login for demo purposes
-            // new Mahasiswa(nimTextField.getText()).showMenu(primaryStage);
-            String nim = nimTextField.getText();
-            Mahasiswa userMenu = new Mahasiswa(nim); // Inisialisasi objek UserMenu dengan NIM
-            userMenu.showMenu(primaryStage); // Memanggil metode showMenu
-        });
+    // Mengatur aksi tombol Login
+    btn.setOnAction(e -> {
+        String nim = nimTextField.getText();
+        Mahasiswa userMenu = new Mahasiswa(nim); // Inisialisasi objek UserMenu dengan NIM
+        userMenu.showMenu(primaryStage); // Memanggil metode showMenu
+    });
 
-        Button backButton = new Button("Kembali");
-        grid.add(backButton, 1, 5);
-        backButton.setOnAction(e -> pilihanLogin(primaryStage));
+    // Mengatur aksi tombol Kembali
+    backButton.setOnAction(e -> pilihanLogin(primaryStage));
 
-        // Mengatur scene dengan grid dan CSS
-        Scene scene = new Scene(grid, 300, 200);
-        scene.getStylesheets().add(getClass().getResource("resource/styles.css").toExternalForm());
-        // scene.getStylesheets().add("../resource/styles.css");
-        // scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+    // Mengatur tata letak komponen-komponen UI
+    HBox row1 = new HBox(10);
+    row1.setAlignment(Pos.CENTER);
+    row1.getChildren().addAll(nimLabel, nimTextField);
 
-        primaryStage.setScene(scene);
+    VBox row2 = new VBox(10);
+    row2.setAlignment(Pos.CENTER);
+    row2.getChildren().addAll( btn,backButton);
 
-        primaryStage.show();
-    }
+    VBox layout = new VBox(20);
+    layout.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
+    layout.setAlignment(Pos.CENTER);
+    layout.getChildren().addAll(sceneTitle, row1, row2, actionTarget);
+
+    // Mengatur scene dengan layout dan CSS
+    Scene scene = new Scene(layout, 570, 512);
+    scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+
+    // Menampilkan stage
+    primaryStage.setScene(scene);
+    primaryStage.show();
+
+}
+
 
 
 
     public void pilihanLogin(Stage primaryStage) {
-        primaryStage.setTitle("Pilih Login");
+        primaryStage.setTitle("SELAMAT DATANG DI PERPUSTAKAAN");
 
-        // Membuat GridPane layout
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
-
-        // Menambahkan komponen ke GridPane
+        // Membuat komponen-komponen UI
         Text sceneTitle = new Text("Pilih Login");
         sceneTitle.setId("welcome-text");
-        grid.add(sceneTitle, 0, 0, 2, 1);
 
         Button adminLoginButton = new Button("Admin Login");
-        grid.add(adminLoginButton, 0, 1);
-
         Button userLoginButton = new Button("User Login");
-        grid.add(userLoginButton, 1, 1);
 
+        // Mengatur aksi tombol Admin Login
         adminLoginButton.setOnAction(e -> loginAdmin(primaryStage));
+        // Mengatur aksi tombol User Login
         userLoginButton.setOnAction(e -> loginMahasiswa(primaryStage));
 
-        // Mengatur scene dengan grid dan CSS
-        Scene scene = new Scene(grid, 300, 200);
-        scene.getStylesheets().add(getClass().getResource("resource/styles.css").toExternalForm());
+        // Mengatur tata letak komponen-komponen UI
+        VBox layout = new VBox(10);
+        layout.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
+        layout.setAlignment(Pos.CENTER);
+
+        layout.getChildren().addAll(
+            sceneTitle,
+            adminLoginButton,
+            userLoginButton
+        );
+
+        // Mengatur scene dengan layout dan CSS
+        Scene scene = new Scene(layout, 570, 512);
+        URL url = this.getClass().getResource("styles.css");
+        if (url == null) {
+            System.out.println("Resource not found. Aborting.");
+            System.exit(-1);
+        }
+        String css = url.toExternalForm();
+        scene.getStylesheets().add(css);
         primaryStage.setScene(scene);
 
         primaryStage.show();

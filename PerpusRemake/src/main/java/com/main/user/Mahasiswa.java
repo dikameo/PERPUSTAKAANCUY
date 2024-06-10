@@ -77,7 +77,7 @@ public class Mahasiswa implements MenuInterface{
         logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
 
         // Mengatur scene dengan grid dan CSS
-        Scene scene = new Scene(grid, 300, 200);
+        Scene scene = new Scene(grid, 570, 512);
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 
         primaryStage.setScene(scene);

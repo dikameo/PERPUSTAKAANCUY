@@ -6,6 +6,6 @@ module com.main {
     opens com.main to javafx.graphics;
     exports com.main;
 
-    opens com.main.user to javafx.graphics;
-    exports com.main.user;
+    // opens com.main.user to javafx.graphics;
+    // exports com.main.user;
 }

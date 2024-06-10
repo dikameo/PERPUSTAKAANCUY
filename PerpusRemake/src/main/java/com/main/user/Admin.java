@@ -40,6 +40,7 @@ public class Admin implements MenuInterface{
         Button logoutButton = new Button("Keluar");
         grid.add(logoutButton, 0, 3);
         
+        // logoutButton.setMaxSize(Double.MAX_VALUE);
         Button givePenaltyButton = new Button("Sanksi Mahasiswa");
         grid.add(givePenaltyButton, 1, 3);
 
@@ -74,7 +75,7 @@ public class Admin implements MenuInterface{
         logoutButton.setOnAction(e -> new Main().pilihanLogin(stage));
 
         // Mengatur scene dengan grid dan CSS
-        Scene scene = new Scene(grid, 300, 200);
+        Scene scene = new Scene(grid, 570, 512);
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         stage.setScene(scene);
 
