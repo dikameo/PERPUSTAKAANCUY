@@ -6,6 +6,7 @@ import com.main.Main;
 import com.main.database.Book;
 import com.main.inter.MenuInterface;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -33,126 +34,151 @@ public class Mahasiswa extends User implements MenuInterface  {
     public void showMenu(Stage primaryStage) {
         primaryStage.setTitle("User Menu");
 
-        // Membuat GridPane layout
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
-
-        // Menambahkan komponen ke GridPane
+        // Membuat komponen-komponen UI
         Text sceneTitle = new Text("User Menu - NIM: " + nim);
         sceneTitle.setId("welcome-text");
-        grid.add(sceneTitle, 0, 0, 2, 1);
 
         Button borrowBookButton = new Button("Pinjam Buku");
-        grid.add(borrowBookButton, 0, 1);
 
         Button tableBorrowedBooksButton = new Button("Buku yang Terpinjam");
-        grid.add(tableBorrowedBooksButton, 1, 1);
 
         Button availableBooksButton = new Button("Buku yang Tersedia");
-        grid.add(availableBooksButton, 0, 2);
 
         Button userDataButton = new Button("Data User");
-        grid.add(userDataButton, 1, 2);
 
         Button notifikasiDendaButton = new Button("Notifikasi Denda");
-        grid.add(notifikasiDendaButton, 0, 3);
 
         Button logoutButton = new Button("Keluar");
-        grid.add(logoutButton, 1, 3);
 
-        borrowBookButton.setOnAction(e -> {
-            showBorrowBook(primaryStage);
-        });
-
-        tableBorrowedBooksButton.setOnAction(e -> {
-           showTableBorrowedBook(primaryStage);
-        });
-
-        availableBooksButton.setOnAction(e -> {
-            showAvailableBook(primaryStage);
-        });
-
-        userDataButton.setOnAction(e -> {
-            showUserData(primaryStage);
-        });
-
-        notifikasiDendaButton.setOnAction(e -> {
-            showNotifikasiDendaButton(primaryStage);
-        });
-
+        // Mengatur aksi tombol-tombol
+        borrowBookButton.setOnAction(e -> showBorrowBook(primaryStage));
+        tableBorrowedBooksButton.setOnAction(e -> showTableBorrowedBook(primaryStage));
+        availableBooksButton.setOnAction(e -> showAvailableBook(primaryStage));
+        userDataButton.setOnAction(e -> showUserData(primaryStage));
+        notifikasiDendaButton.setOnAction(e -> showNotifikasiDendaButton(primaryStage));
         logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
 
-        // Mengatur scene dengan grid dan CSS
-        Scene scene = new Scene(grid, 570, 512);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        // Mengatur tata letak dengan VBox
+        VBox menuLayout = new VBox(10);
+        menuLayout.setPadding(new Insets(25));
+        menuLayout.setAlignment(Pos.CENTER);
+        menuLayout.getChildren().addAll(
+            sceneTitle,
+            borrowBookButton,
+            tableBorrowedBooksButton,
+            availableBooksButton,
+            userDataButton,
+            notifikasiDendaButton,
+            logoutButton
+        );
 
+        // Mengatur scene dengan layout dan CSS
+        Scene scene = new Scene(menuLayout, 570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
         primaryStage.setScene(scene);
 
         primaryStage.show();
+
     }
 
     public void showBorrowBook(Stage primaryStage){
-    primaryStage.setTitle("Form Peminjaman");
+        
+        primaryStage.setTitle("Form Peminjaman");
 
-    // Membuat komponen-komponen UI
-    Text sceneTitle = new Text("Silahkan Untuk meminjam buku");
-    sceneTitle.setId("welcome-text");
+        // Membuat komponen-komponen UI untuk Form Peminjaman
+        Text sceneTitle = new Text("Silahkan Untuk meminjam buku");
+        sceneTitle.setId("welcome-text");
 
-    Label kodeLabel = new Label("Kode Buku:");
-    TextField kodeTextField = new TextField();
-    kodeTextField.getStyleClass().add("text-field");
+        Label kodeLabel = new Label("Kode Buku:");
+        TextField kodeTextField = new TextField();
+        kodeTextField.getStyleClass().add("text-field");
 
-    Label hariLabel = new Label("lama peminjaman hari:");
-    TextField hariTextField = new TextField();
-    hariTextField.getStyleClass().add("text-field");
+        Label hariLabel = new Label("lama peminjaman hari:");
+        TextField hariTextField = new TextField();
+        hariTextField.getStyleClass().add("text-field");
 
-    Button btn = new Button("Kirim");
-    btn.setId("btn-login");
+        Button btn = new Button("Kirim");
+        btn.setId("btn-login");
 
-    Button backButton = new Button("Kembali");
-    backButton.setId("btn-outline");
+        Button backButton = new Button("Kembali");
+        backButton.setId("btn-outline");
 
+        final Text actionTarget = new Text();
 
-    final Text actionTarget = new Text();
+        // Mengatur aksi tombol Login
+        btn.setOnAction(e -> {
+            System.out.println("Berhasil"); // TOMBOL AMAN
+        });
 
-    // Mengatur aksi tombol Login
-    btn.setOnAction(e -> {
-        System.out.println("Berhasil"); // TOMBOL AMAN
-    });
+        // Mengatur aksi tombol Kembali
+        backButton.setOnAction(e -> showMenu(primaryStage));
 
+        // Membuat GridPane layout untuk Form Peminjaman
+        GridPane formGrid = new GridPane();
+        formGrid.setAlignment(Pos.CENTER);
+        formGrid.setHgap(10);
+        formGrid.setVgap(10);
+        formGrid.setPadding(new Insets(25, 25, 25, 25));
 
-    // Mengatur aksi tombol Kembali
-    backButton.setOnAction(e -> showMenu(primaryStage));
+        // Menambahkan komponen ke GridPane untuk Form Peminjaman
+        formGrid.add(sceneTitle, 0, 0, 2, 1);
+        formGrid.add(kodeLabel, 0, 1);
+        formGrid.add(kodeTextField, 1, 1);
+        formGrid.add(hariLabel, 0, 2);
+        formGrid.add(hariTextField, 1, 2);
+        formGrid.add(btn, 1, 3);
+        formGrid.add(backButton, 0, 3);
+        formGrid.add(actionTarget, 0, 4, 2, 1);
 
+        // Membuat komponen TableView untuk Menu Buku yang Tersedia
+        TableView<Book> table = new TableView<>();
 
+        // Kolom-kolom untuk TableView
+        TableColumn<Book, Integer> noColumn = new TableColumn<>("No");
+        noColumn.setCellValueFactory(new PropertyValueFactory<>("no"));
 
-    HBox row1 = new HBox(10);
-    row1.setAlignment(Pos.CENTER);
-    row1.getChildren().addAll(kodeLabel, kodeTextField);
-    
-    HBox row2 = new HBox(10);
-    row2.setAlignment(Pos.CENTER);
-    row2.getChildren().addAll(hariLabel, hariTextField);
-    
-    VBox row3 = new VBox(10);
-    row3.setAlignment(Pos.CENTER);
-    row3.getChildren().addAll(btn,backButton);
-    
-    VBox layout = new VBox(20);
-    layout.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
-    layout.setAlignment(Pos.CENTER);
-    layout.getChildren().addAll(sceneTitle, row1, row2, row3, actionTarget);
-    
+        TableColumn<Book, String> kodeBukuColumn = new TableColumn<>("Kode Buku");
+        kodeBukuColumn.setCellValueFactory(new PropertyValueFactory<>("kodeBuku"));
 
-    // Mengatur scene dengan layout dan CSS
-    Scene scene = new Scene(layout, 570, 512);
-    scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        TableColumn<Book, String> judulBukuColumn = new TableColumn<>("Judul Buku");
+        judulBukuColumn.setCellValueFactory(new PropertyValueFactory<>("judulBuku"));
 
-    // Menampilkan stage
-    primaryStage.setScene(scene);
-    primaryStage.show();
+        TableColumn<Book, String> penulisBukuColumn = new TableColumn<>("Penulis Buku");
+        penulisBukuColumn.setCellValueFactory(new PropertyValueFactory<>("penulisBuku"));
+
+        TableColumn<Book, String> terbitanColumn = new TableColumn<>("Terbitan");
+        terbitanColumn.setCellValueFactory(new PropertyValueFactory<>("terbitan"));
+
+        TableColumn<Book, String> kategoriColumn = new TableColumn<>("Kategori");
+        kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori"));
+
+        TableColumn<Book, String> lokasiColumn = new TableColumn<>("Lokasi Rak");
+        lokasiColumn.setCellValueFactory(new PropertyValueFactory<>("lokasi"));
+
+        TableColumn<Book, String> stokColumn = new TableColumn<>("Stok");
+        stokColumn.setCellValueFactory(new PropertyValueFactory<>("stok"));
+
+        // Menambahkan kolom-kolom ke dalam TableView
+        table.getColumns().addAll(noColumn, kodeBukuColumn, judulBukuColumn, penulisBukuColumn, terbitanColumn, kategoriColumn, lokasiColumn, stokColumn);
+
+        // Membuat GridPane layout untuk Menu Buku yang Tersedia
+        GridPane tableGrid = new GridPane();
+        tableGrid.setAlignment(Pos.CENTER);
+        tableGrid.setHgap(5);
+        tableGrid.setVgap(5);
+        tableGrid.setPadding(new Insets(10, 10, 10, 10));
+
+        // Menambahkan TableView ke dalam GridPane untuk Menu Buku yang Tersedia
+        tableGrid.add(table, 0, 0);
+
+        // Mengatur scene dengan layout dan CSS
+        Scene scene = new Scene(new VBox(10, sceneTitle,tableGrid,formGrid), 800, 600);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
+
+        // Menampilkan stage
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
     }
 
     @Override
@@ -173,7 +199,7 @@ public class Mahasiswa extends User implements MenuInterface  {
         judulBukuColumn.setCellValueFactory(new PropertyValueFactory<>("judulBuku"));
 
         TableColumn<Book, String> penulisBukuColumn = new TableColumn<>("Penulis Buku");
-        judulBukuColumn.setCellValueFactory(new PropertyValueFactory<>("penulisBuku"));
+        penulisBukuColumn.setCellValueFactory(new PropertyValueFactory<>("penulisBuku"));
 
         // Kolom Terbitan
         TableColumn<Book, String> terbitanColumn = new TableColumn<>("Terbitan");
@@ -185,23 +211,23 @@ public class Mahasiswa extends User implements MenuInterface  {
 
         // Kolom Kategori
         TableColumn<Book, String> lokasiColumn = new TableColumn<>("lokasi Rak");
-        kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("lokasi"));
+        lokasiColumn.setCellValueFactory(new PropertyValueFactory<>("lokasi"));
 
          // Kolom Kategori
          TableColumn<Book, String> stokColumn = new TableColumn<>("Stok");
-         kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("Stok"));
+         stokColumn.setCellValueFactory(new PropertyValueFactory<>("Stok"));
 
         table.getColumns().addAll(noColumn, kodeBukuColumn, judulBukuColumn, penulisBukuColumn, terbitanColumn, kategoriColumn,lokasiColumn,stokColumn);
 
 
         Button backButton = new Button("Kembali");
         backButton.setId("btn-outline");
-
-        Main menu = new Main();
         backButton.setOnAction(e -> showMenu(primaryStage));
 
         VBox vbox = new VBox(table,backButton);
+        vbox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vbox,570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -244,12 +270,15 @@ public class Mahasiswa extends User implements MenuInterface  {
 
         Button backButton = new Button("Kembali");
         backButton.setId("btn-outline");
+        
 
-        Main menu = new Main();
+
         backButton.setOnAction(e -> showMenu(primaryStage));
 
         VBox vbox = new VBox(table,backButton);
+        vbox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vbox,570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -294,7 +323,7 @@ public class Mahasiswa extends User implements MenuInterface  {
 
         VBox vbox = new VBox(grid,backButton);
         Scene scene = new Scene(vbox, 570, 512);
-
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
         primaryStage.setTitle("Data Pengguna");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -330,7 +359,7 @@ public class Mahasiswa extends User implements MenuInterface  {
         VBox vbox = new VBox(dendaButton,backButton);
         
         Scene scene = new Scene(vbox, 570, 512);
-
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
         primaryStage.setTitle("Notifikasi Denda");
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -4,11 +4,13 @@ import com.main.Main;
 import com.main.database.Book;
 import com.main.inter.MenuInterface;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -22,71 +24,60 @@ import javafx.stage.Stage;
 public class Admin extends User implements MenuInterface{
 
     @Override
-    public void showMenu(Stage stage) {
-        stage.setTitle("Admin Menu");
+    public void showMenu(Stage primaryStage) {
+        primaryStage.setTitle("Admin Menu");
 
-        // Membuat GridPane layout
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
-
-        // Menambahkan komponen ke GridPane
+        // Membuat komponen-komponen UI
         Text sceneTitle = new Text("Admin Menu");
         sceneTitle.setId("welcome-text");
-        grid.add(sceneTitle, 0, 0, 2, 1);
-
+        
         Button addStudentButton = new Button("Tambahkan Mahasiswa");
-        grid.add(addStudentButton, 0, 1);
-
+        addStudentButton.getStyleClass().add("menu-button");
+        
         Button addBookButton = new Button("Tambahkan Buku");
-        grid.add(addBookButton, 1, 1);
-
+        addBookButton.getStyleClass().add("menu-button");
+        
         Button checkStudentButton = new Button("Cek Mahasiswa");
-        grid.add(checkStudentButton, 0, 2);
-
+        checkStudentButton.getStyleClass().add("menu-button");
+        
         Button availableBookButton = new Button("Cek Buku");
-        grid.add(availableBookButton, 1, 2);
+        availableBookButton.getStyleClass().add("menu-button");
+        
+        Button givePenaltyButton = new Button("Sanksi Mahasiswa");
+        givePenaltyButton.getStyleClass().add("menu-button");
         
         Button logoutButton = new Button("Keluar");
-        grid.add(logoutButton, 0, 3);
+        logoutButton.getStyleClass().add("menu-button");
         
-        // logoutButton.setMaxSize(Double.MAX_VALUE);
-        Button givePenaltyButton = new Button("Sanksi Mahasiswa");
-        grid.add(givePenaltyButton, 1, 3);
-
-        addStudentButton.setOnAction(e -> {
-            showAddMahasiswa(stage);
-        });
-
-        addBookButton.setOnAction(e -> {
-            showAddBook(stage);
-        });
-
-        checkStudentButton.setOnAction(e -> {
-            showStudent(stage);
-        });
-
-        availableBookButton.setOnAction(e -> {
-            showAvailableBook(stage);
-        });
-
-
-        givePenaltyButton.setOnAction(e -> {
-            // Placeholder: Ganti dengan fungsi atau tampilan yang sesuai
-            System.out.println("Cek Buku clicked");
-        });
-
-
-
-        logoutButton.setOnAction(e -> new Main().pilihanLogin(stage));
-
-        // Mengatur scene dengan grid dan CSS
-        Scene scene = new Scene(grid, 570, 512);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
-        stage.setScene(scene);
-
-        stage.show();
+        // Mengatur aksi tombol-tombol
+        addStudentButton.setOnAction(e -> showAddMahasiswa(primaryStage));
+        addBookButton.setOnAction(e -> showAddBook(primaryStage));
+        checkStudentButton.setOnAction(e -> showStudent(primaryStage));
+        availableBookButton.setOnAction(e -> showAvailableBook(primaryStage));
+        givePenaltyButton.setOnAction(e -> System.out.println("Sanksi Mahasiswa clicked"));
+        logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
+        
+        // Mengatur tata letak dengan VBox
+        VBox menuLayout = new VBox(10);
+        menuLayout.setPadding(new Insets(25));
+        menuLayout.setAlignment(Pos.CENTER);
+        menuLayout.getChildren().addAll(
+            sceneTitle,
+            addStudentButton,
+            addBookButton,
+            checkStudentButton,
+            availableBookButton,
+            givePenaltyButton,
+            logoutButton
+        );
+        
+        // Mengatur scene dengan layout dan CSS
+        Scene scene = new Scene(menuLayout, 570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
+        primaryStage.setScene(scene);
+        
+        primaryStage.show();
+        
     }
 
 
@@ -120,11 +111,11 @@ public class Admin extends User implements MenuInterface{
 
         // Kolom Kategori
         TableColumn<Book, String> lokasiColumn = new TableColumn<>("lokasi Rak");
-        kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("lokasi"));
+        lokasiColumn.setCellValueFactory(new PropertyValueFactory<>("lokasi"));
 
          // Kolom Kategori
          TableColumn<Book, String> stokColumn = new TableColumn<>("Stok");
-         kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("Stok"));
+         stokColumn.setCellValueFactory(new PropertyValueFactory<>("Stok"));
 
         table.getColumns().addAll(noColumn, kodeBukuColumn, judulBukuColumn, penulisBukuColumn, terbitanColumn, kategoriColumn,lokasiColumn,stokColumn);
 
@@ -136,7 +127,9 @@ public class Admin extends User implements MenuInterface{
         backButton.setOnAction(e -> showMenu(primaryStage));
 
         VBox vbox = new VBox(table,backButton);
+        vbox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vbox,570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -183,28 +176,29 @@ public class Admin extends User implements MenuInterface{
         Button backButton = new Button("Kembali");
         backButton.setId("btn-outline");
 
-        Main menu = new Main();
         backButton.setOnAction(e -> showMenu(primaryStage));
 
         VBox vbox = new VBox(table,backButton);
+        vbox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vbox,570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     public void showAddMahasiswa(Stage primaryStage){
-        primaryStage.setTitle("Admin Login Form");
+        primaryStage.setTitle("Pendaftaran Mahasiswa");
 
         // Membuat komponen-komponen UI
         Text sceneTitle = new Text("Pendaftaran Mahasiswa");
         sceneTitle.setId("welcome-text");
-        
-        Label namaLengkap = new Label("Nama Lengkap :");
+
+        Label namaLengkap = new Label("Nama Lengkap:");
         namaLengkap.setId("paragraph");
         TextField namaTextField = new TextField();
         namaTextField.getStyleClass().add("text-field");
 
-        Label nimMahasiswa = new Label("NIM :");
+        Label nimMahasiswa = new Label("NIM:");
         nimMahasiswa.setId("paragraph");
         TextField nimTextField = new TextField();
         nimTextField.getStyleClass().add("text-field");
@@ -214,159 +208,165 @@ public class Admin extends User implements MenuInterface{
         TextField proditTextField = new TextField();
         proditTextField.getStyleClass().add("text-field");
 
-        Label fakultasMahasiswa = new Label("Nama Fakultas :");
+        Label fakultasMahasiswa = new Label("Nama Fakultas:");
         fakultasMahasiswa.setId("paragraph");
         TextField fakultasTextField = new TextField();
         fakultasTextField.getStyleClass().add("text-field");
-        
 
-    
-
-        
         Button btn = new Button("Daftarkan");
         Button backButton = new Button("Kembali");
         backButton.setId("btn-outline");
-        
+
         final Text actionTarget = new Text();
-        
-        // Mengatur aksi tombol Sign in
+
+        // Mengatur aksi tombol Daftarkan
         btn.setOnAction(e -> {
-           System.out.println("Terdaftar");
+            System.out.println("Terdaftar");
         });
-        
+
         // Mengatur aksi tombol Kembali
         backButton.setOnAction(e -> showMenu(primaryStage));
-        
-        // Mengatur tata letak komponen-komponen UI
-        HBox row1 = new HBox(10);
-        row1.setAlignment(Pos.CENTER);
-        row1.getChildren().addAll(namaLengkap, namaTextField);
-        
-        HBox row2 = new HBox(10);
-        row2.setAlignment(Pos.CENTER);
-        row2.getChildren().addAll(nimMahasiswa, nimTextField);
 
-        HBox row3 = new HBox(10);
-        row3.setAlignment(Pos.CENTER);
-        row3.getChildren().addAll(prodiMahasiswa, proditTextField);
+        // Mengatur tata letak komponen-komponen UI dengan GridPane
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
 
-        HBox row4 = new HBox(10);
-        row4.setAlignment(Pos.CENTER);
-        row4.getChildren().addAll(fakultasMahasiswa, fakultasTextField);
-        
-        VBox row5 = new VBox(10);
-        row5.setAlignment(Pos.CENTER);
-        row5.getChildren().addAll(btn,backButton);
-        
-        VBox layout = new VBox(20);
-        layout.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
-        layout.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(sceneTitle, row1, row2, row3,row4, row5, actionTarget);
-        
+        grid.add(sceneTitle, 0, 0, 2, 1);
+
+        grid.add(namaLengkap, 0, 1);
+        grid.add(namaTextField, 1, 1);
+
+        grid.add(nimMahasiswa, 0, 2);
+        grid.add(nimTextField, 1, 2);
+
+        grid.add(prodiMahasiswa, 0, 3);
+        grid.add(proditTextField, 1, 3);
+
+        grid.add(fakultasMahasiswa, 0, 4);
+        grid.add(fakultasTextField, 1, 4);
+
+        HBox hbBtn = new HBox(10);
+        hbBtn.setAlignment(Pos.CENTER);
+        hbBtn.getChildren().addAll(backButton,btn);
+        grid.add(hbBtn, 1, 5);
+
+        grid.add(actionTarget, 1, 6);
+
         // Mengatur scene dengan layout dan CSS
-        Scene scene = new Scene(layout, 570, 512);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
-        
+        Scene scene = new Scene(grid, 570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
+
         // Menampilkan stage
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     public void showAddBook(Stage primaryStage){
-            primaryStage.setTitle("Tambahkan Buku");
-    
-            // Membuat komponen-komponen UI
-            Text sceneTitle = new Text("Pendaftaran Mahasiswa");
-            sceneTitle.setId("welcome-text");
-            
-            Label judulBuku = new Label("Judul buku :");
-            judulBuku.setId("paragraph");
-            TextField judulTextField = new TextField();
-            judulTextField.getStyleClass().add("text-field");
-    
-            Label penulisBuku = new Label("Penulis Buku :");
-            penulisBuku.setId("paragraph");
-            TextField penulisTextField = new TextField();
-            penulisTextField.getStyleClass().add("text-field");
-    
-            Label terbitanBuku = new Label("Terbitan buku:");
-            terbitanBuku.setId("paragraph");
-            TextField terbitanBukuTextField = new TextField();
-            terbitanBukuTextField.getStyleClass().add("text-field");
-    
-            Label kategoriBuku = new Label("kategori Buku :");
-            kategoriBuku.setId("paragraph");
-            TextField kategoriTextField = new TextField();
-            kategoriTextField.getStyleClass().add("text-field");
+        primaryStage.setTitle("Tambahkan Buku");
 
-            Label lokasiRak = new Label("lokasi Rak :");
-            lokasiRak.setId("paragraph");
-            TextField lokasiTextField = new TextField();
-            lokasiTextField.getStyleClass().add("text-field");
-            
-            Label stok = new Label("Stock :");
-            stok.setId("paragraph");
-            TextField stokTextField = new TextField();
-            stokTextField.getStyleClass().add("text-field");
-    
-        
+        // Membuat komponen-komponen UI
+        Text sceneTitle = new Text("Tambahkan Buku");
+        sceneTitle.setId("welcome-text");
 
-            
-            Button btn = new Button("Daftarkan");
-            Button backButton = new Button("Kembali");
-            backButton.setId("btn-outline");
-            
-            final Text actionTarget = new Text();
-            
-            // Mengatur aksi tombol Sign in
-            btn.setOnAction(e -> {
-               System.out.println("Terdaftar");
-            });
-            
-            // Mengatur aksi tombol Kembali
-            backButton.setOnAction(e -> showMenu(primaryStage));
-            
-            // Mengatur tata letak komponen-komponen UI
-            HBox row1 = new HBox(10);
-            row1.setAlignment(Pos.CENTER);
-            row1.getChildren().addAll(judulBuku, judulTextField);
-            
-            HBox row2 = new HBox(10);
-            row2.setAlignment(Pos.CENTER);
-            row2.getChildren().addAll(penulisBuku, penulisTextField);
-    
-            HBox row3 = new HBox(10);
-            row3.setAlignment(Pos.CENTER);
-            row3.getChildren().addAll(terbitanBuku, terbitanBukuTextField);
-    
-            HBox row4 = new HBox(10);
-            row4.setAlignment(Pos.CENTER);
-            row4.getChildren().addAll(kategoriBuku, kategoriTextField);
+        Label judulBuku = new Label("Judul Buku:");
+        judulBuku.setId("paragraph");
+        TextField judulTextField = new TextField();
+        judulTextField.getStyleClass().add("text-field");
 
-            HBox row5 = new HBox(10);
-            row5.setAlignment(Pos.CENTER);
-            row5.getChildren().addAll(lokasiRak, lokasiTextField);
+        Label penulisBuku = new Label("Penulis Buku:");
+        penulisBuku.setId("paragraph");
+        TextField penulisTextField = new TextField();
+        penulisTextField.getStyleClass().add("text-field");
 
-            HBox row6 = new HBox(10);
-            row6.setAlignment(Pos.CENTER);
-            row6.getChildren().addAll(stok, stokTextField);
-            
-            VBox row7 = new VBox(10);
-            row7.setAlignment(Pos.CENTER);
-            row7.getChildren().addAll(btn,backButton);
-            
-            VBox layout = new VBox(20);
-            layout.setPadding(new javafx.geometry.Insets(25, 25, 25, 25));
-            layout.setAlignment(Pos.CENTER);
-            layout.getChildren().addAll(sceneTitle, row1, row2, row3,row4, row5, row6,row7,actionTarget);
-            
-            // Mengatur scene dengan layout dan CSS
-            Scene scene = new Scene(layout, 570, 512);
-            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
-            
-            // Menampilkan stage
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        
+        Label terbitanBuku = new Label("Terbitan Buku:");
+        terbitanBuku.setId("paragraph");
+        DatePicker terbitanBukuDatePicker = new DatePicker();
+        terbitanBukuDatePicker.getStyleClass().add("text-field");
+
+        Label kategoriBuku = new Label("Kategori Buku:");
+        kategoriBuku.setId("paragraph");
+        ComboBox<String> kategoriComboBox = new ComboBox<>();
+        kategoriComboBox.getItems().addAll(
+            "Fiksi", 
+            "Non-Fiksi", 
+            "Teknologi", 
+            "Sains", 
+            "Sejarah"
+        );
+        kategoriComboBox.getStyleClass().add("text-field");
+
+        Label lokasiRak = new Label("Lokasi Rak:");
+        lokasiRak.setId("paragraph");
+        TextField lokasiTextField = new TextField();
+        lokasiTextField.getStyleClass().add("text-field");
+
+        Label stok = new Label("Stok:");
+        stok.setId("paragraph");
+        TextField stokTextField = new TextField();
+        stokTextField.getStyleClass().add("text-field");
+
+        Button btn = new Button("Daftarkan");
+        Button backButton = new Button("Kembali");
+        backButton.setId("btn-outline");
+
+        final Text actionTarget = new Text();
+
+        // Mengatur aksi tombol Daftarkan
+        btn.setOnAction(e -> {
+            System.out.println("Terdaftar");
+        });
+
+        // Mengatur aksi tombol Kembali
+        backButton.setOnAction(e -> showMenu(primaryStage));
+
+        // Mengatur tata letak komponen-komponen UI dengan GridPane
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+        grid.add(sceneTitle, 0, 0, 2, 1);
+
+        grid.add(judulBuku, 0, 1);
+        grid.add(judulTextField, 1, 1);
+
+        grid.add(penulisBuku, 0, 2);
+        grid.add(penulisTextField, 1, 2);
+
+        grid.add(terbitanBuku, 0, 3);
+        grid.add(terbitanBukuDatePicker, 1, 3);
+
+        grid.add(kategoriBuku, 0, 4);
+        grid.add(kategoriComboBox, 1, 4);
+
+        grid.add(lokasiRak, 0, 5);
+        grid.add(lokasiTextField, 1, 5);
+
+        grid.add(stok, 0, 6);
+        grid.add(stokTextField, 1, 6);
+
+        HBox hbBtn = new HBox(10);
+        hbBtn.setAlignment(Pos.CENTER);
+        hbBtn.getChildren().addAll( backButton,btn);
+        grid.add(hbBtn, 1, 7);
+
+        grid.add(actionTarget, 1, 8);
+
+        // Mengatur scene dengan layout dan CSS
+        Scene scene = new Scene(grid, 570, 512);
+        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
+
+        // Menampilkan stage
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
+
+
+
+
+    
 }
