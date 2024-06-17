@@ -234,6 +234,47 @@ public class Mahasiswa extends User implements MenuInterface  {
 
 
     public void  showTableBorrowedBook(Stage primaryStage){
+
+
+          // Membuat komponen-komponen UI untuk Form Peminjaman
+          Text sceneTitle = new Text("Menu kembalian buku");
+          sceneTitle.setId("welcome-text");
+  
+          Label kodeLabel = new Label("Kode Buku yang ingin dikembalikan:");
+          TextField kodeTextField = new TextField();
+          kodeTextField.getStyleClass().add("text-field");
+  
+          Button btn = new Button("Kirim");
+          btn.setId("btn-login");
+  
+          Button backButton = new Button("Kembali");
+          backButton.setId("btn-outline");
+  
+          final Text actionTarget = new Text();
+  
+          // Mengatur aksi tombol Login
+          btn.setOnAction(e -> {
+              System.out.println("Berhasil"); // TOMBOL AMAN
+          });
+  
+          // Mengatur aksi tombol Kembali
+          backButton.setOnAction(e -> showMenu(primaryStage));
+  
+          // Membuat GridPane layout untuk Form Peminjaman
+          GridPane formGrid = new GridPane();
+          formGrid.setAlignment(Pos.CENTER);
+          formGrid.setHgap(10);
+          formGrid.setVgap(10);
+          formGrid.setPadding(new Insets(25, 25, 25, 25));
+  
+          // Menambahkan komponen ke GridPane untuk Form Peminjaman
+          formGrid.add(sceneTitle, 0, 0, 2, 1);
+          formGrid.add(kodeLabel, 0, 1);
+          formGrid.add(kodeTextField, 1, 1);
+          formGrid.add(btn, 1, 2);
+          formGrid.add(backButton, 0, 2);
+          formGrid.add(actionTarget, 0, 4, 2, 1);
+
         primaryStage.setTitle("Menu Buku yang Terpinjam");
         TableView<Book> table = new TableView<>();
 
@@ -268,17 +309,20 @@ public class Mahasiswa extends User implements MenuInterface  {
         table.getColumns().addAll(noColumn, kodeBukuColumn, judulBukuColumn, penulisBukuColumn, terbitanColumn, kategoriColumn,durasiColumn);
 
 
-        Button backButton = new Button("Kembali");
-        backButton.setId("btn-outline");
-        
 
+        GridPane tableGrid = new GridPane();
+        tableGrid.setAlignment(Pos.CENTER);
+        tableGrid.setHgap(5);
+        tableGrid.setVgap(5);
+        tableGrid.setPadding(new Insets(10, 10, 10, 10));
 
-        backButton.setOnAction(e -> showMenu(primaryStage));
+        // Menambahkan TableView ke dalam GridPane untuk Menu Buku yang Tersedia
+        tableGrid.add(table, 0, 0);
 
-        VBox vbox = new VBox(table,backButton);
-        vbox.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(vbox,570, 512);
+        // Mengatur scene dengan layout dan CSS
+        Scene scene = new Scene(new VBox(10, sceneTitle,tableGrid,formGrid), 800, 600);
         scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
+        backButton.setOnAction(e -> showMenu(primaryStage));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
