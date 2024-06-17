@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="demo" />
-        <module name="PerpusDikadam" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="PerpusDikadam" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
