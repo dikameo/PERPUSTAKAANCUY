@@ -54,7 +54,7 @@ public class Admin extends User implements MenuInterface{
         addBookButton.setOnAction(e -> showAddBook(primaryStage));
         checkStudentButton.setOnAction(e -> showStudent(primaryStage));
         availableBookButton.setOnAction(e -> showAvailableBook(primaryStage));
-        givePenaltyButton.setOnAction(e -> System.out.println("Sanksi Mahasiswa clicked"));
+        givePenaltyButton.setOnAction(e -> showSanksiStudent(primaryStage));
         logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
         
         // Mengatur tata letak dengan VBox
@@ -366,7 +366,95 @@ public class Admin extends User implements MenuInterface{
     }
 
 
-
+    public void showSanksiStudent(Stage primaryStage){
+        
+           Text sceneTitle = new Text("Berikan sanksi");
+           sceneTitle.setId("welcome-text");
+   
+           Label kodeLabel = new Label("Kode Buku yang ingin terlambat:");
+           TextField kodeTextField = new TextField();
+           kodeTextField.getStyleClass().add("text-field");
+   
+           Button btn = new Button("Kirim");
+           btn.setId("btn-login");
+   
+           Button backButton = new Button("Kembali");
+           backButton.setId("btn-outline");
+   
+           final Text actionTarget = new Text();
+   
+           btn.setOnAction(e -> {
+               System.out.println("Berhasil"); 
+           });
+   
+          
+           backButton.setOnAction(e -> showMenu(primaryStage));
+   
+           GridPane formGrid = new GridPane();
+           formGrid.setAlignment(Pos.CENTER);
+           formGrid.setHgap(10);
+           formGrid.setVgap(10);
+           formGrid.setPadding(new Insets(25, 25, 25, 25));
+   
+           
+           formGrid.add(sceneTitle, 0, 0, 2, 1);
+           formGrid.add(kodeLabel, 0, 1);
+           formGrid.add(kodeTextField, 1, 1);
+           formGrid.add(btn, 1, 2);
+           formGrid.add(backButton, 0, 2);
+           formGrid.add(actionTarget, 0, 4, 2, 1);
+ 
+         primaryStage.setTitle("Berikan sanksi pada peminjaman");
+         TableView<Book> table = new TableView<>();
+ 
+      
+         TableColumn<Book, Integer> noColumn = new TableColumn<>("No");
+         noColumn.setCellValueFactory(new PropertyValueFactory<>("no"));
+ 
+       
+         TableColumn<Book, String> kodeBukuColumn = new TableColumn<>("Kode Buku");
+         kodeBukuColumn.setCellValueFactory(new PropertyValueFactory<>("kodeBuku"));
+ 
+     
+         TableColumn<Book, String> judulBukuColumn = new TableColumn<>("Judul Buku");
+         judulBukuColumn.setCellValueFactory(new PropertyValueFactory<>("judulBuku"));
+ 
+         TableColumn<Book, String> penulisBukuColumn = new TableColumn<>("Penulis Buku");
+         penulisBukuColumn.setCellValueFactory(new PropertyValueFactory<>("penulisBuku"));
+ 
+      
+         TableColumn<Book, String> terbitanColumn = new TableColumn<>("Terbitan");
+         terbitanColumn.setCellValueFactory(new PropertyValueFactory<>("terbitan"));
+ 
+      
+         TableColumn<Book, String> kategoriColumn = new TableColumn<>("Kategori");
+         kategoriColumn.setCellValueFactory(new PropertyValueFactory<>("kategori"));
+ 
+ 
+          // Kolom Kategori
+          TableColumn<Book, String> durasiColumn = new TableColumn<>("Durasi");
+          durasiColumn.setCellValueFactory(new PropertyValueFactory<>("Durasi"));
+ 
+         table.getColumns().addAll(noColumn, kodeBukuColumn, judulBukuColumn, penulisBukuColumn, terbitanColumn, kategoriColumn,durasiColumn);
+ 
+ 
+ 
+         GridPane tableGrid = new GridPane();
+         tableGrid.setAlignment(Pos.CENTER);
+         tableGrid.setHgap(5);
+         tableGrid.setVgap(5);
+         tableGrid.setPadding(new Insets(10, 10, 10, 10));
+ 
+         
+         tableGrid.add(table, 0, 0);
+ 
+       
+         Scene scene = new Scene(new VBox(10, sceneTitle,tableGrid,formGrid), 800, 600);
+         scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
+         backButton.setOnAction(e -> showMenu(primaryStage));
+         primaryStage.setScene(scene);
+         primaryStage.show();
+    }
 
     
 }

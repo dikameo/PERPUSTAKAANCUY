@@ -5,6 +5,7 @@ import java.net.URL;
 import com.main.user.Admin;
 import com.main.user.Mahasiswa;
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,9 +18,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
+ 
     @Override
     public void start(Stage primaryStage) {
+        
         pilihanLogin(primaryStage);
     }
 
