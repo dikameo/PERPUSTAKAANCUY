@@ -22,25 +22,25 @@ public class Main extends Application {
         launch(args);
     }
     public static void addUser(){
-//        Mahasiswa mahasiswa1 = new Mahasiswa("AGUS","202310370311080","FT","INFORMATIKA");
-//        Mahasiswa mahasiswa2 = new Mahasiswa("AHMAD","202310370311091","FT","INFORMATIKA");
-//        Mahasiswa mahasiswa3 = new Mahasiswa("Jukii","202310370311071","FT","INFORMATIKA");
-//        Mahasiswa mahasiswa4 = new Mahasiswa("Natsha","202310370311072","FT","INFORMATIKA");
+        Mahasiswa mahasiswa1 = new Mahasiswa("AGUS","202310370311080","FT","INFORMATIKA");
+        Mahasiswa mahasiswa2 = new Mahasiswa("AHMAD","202310370311091","FT","INFORMATIKA");
+        Mahasiswa mahasiswa3 = new Mahasiswa("Jukii","202310370311071","FT","INFORMATIKA");
+        Mahasiswa mahasiswa4 = new Mahasiswa("Natsha","202310370311072","FT","INFORMATIKA");
 //        Admin.getMahasiswaData().add(mahasiswa1);
 //        Admin.getMahasiswaData().add(mahasiswa2);
 //        Admin.getMahasiswaData().add(mahasiswa4);
 //        Admin.getMahasiswaData().add(mahasiswa3);
-//        Book book1 = new Book("UMM-202-301","Ilmu Hitam", "Nyi Towok",100);
-//        book1.setCategory("Sejarah");
-//        User.getBookList().add(book1);
-//        book1.setDuration(9);
-//        mahasiswa1.getBorrowedBooks().add(book1);
+////        Book book1 = new Book("UMM-202-301","Ilmu Hitam", "Nyi Towok",100);
+////        book1.setCategory("Sejarah");
+////        User.getBookList().add(book1);
+////        book1.setDuration(9);
+////        mahasiswa1.getBorrowedBooks().add(book1);
     }
     
     
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)throws Exception {
         pilihanLogin(primaryStage);
     }
 
@@ -174,9 +174,6 @@ private void loginMahasiswa(Stage primaryStage) {
 
 }
 
-
-
-
     public void pilihanLogin(Stage primaryStage) {
         primaryStage.setTitle("SELAMAT DATANG DI PERPUSTAKAAN");
 
@@ -217,10 +214,16 @@ private void loginMahasiswa(Stage primaryStage) {
         primaryStage.show();
     }
 
-    public static void addTempMahasiswa
+    public static void addTempMahasiswa(Admin admin,String namaLengkap,String nimMahasiswa, String fakultasMahasiswa, String prodiMahasiswa) {
+        admin.addMahasiswa(namaLengkap,nimMahasiswa,fakultasMahasiswa,prodiMahasiswa);
+    }
 
-
-
-
+//    public static Mahasiswa checkNIM(String namaLengkap,String nimMahasiswa, String fakultasMahasiswa, String prodiMahasiswa) {
+//        for (Mahasiswa x : Admin.getMahasiswaData()) {
+//            if (x.getnimMahasiswa().equals(nimMahasiswa)) {
+//                return null;
+//            }
+//        }
+//        return new Mahasiswa(namaLengkap, nimMahasiswa, fakultasMahasiswa, prodiMahasiswa);
 
 }

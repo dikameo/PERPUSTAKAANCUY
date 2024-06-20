@@ -18,7 +18,7 @@ public class PropertyMahasiswa {
     public static ArrayList<PropertyMahasiswa> mahasiswaToProperty (ArrayList<Mahasiswa> arr){
         ArrayList<PropertyMahasiswa> temp = new ArrayList<>();
         for (Mahasiswa mahasiswa : arr) {
-            PropertyMahasiswa obj = new PropertyMahasiswa(mahasiswa.getnamaLengkap(), mahasiswa.getnimMahasiswa(), mahasiswa.getprodiMahasiswa(), mahasiswa.getfakultasMahasiswa());
+            PropertyMahasiswa obj = new PropertyMahasiswa(mahasiswa.getNamaLengkap(), mahasiswa.getNimMahasiswa(), mahasiswa.getProdiMahasiswa(), mahasiswa.getFakultasMahasiswa());
             temp.add(obj);
         }
         return temp;

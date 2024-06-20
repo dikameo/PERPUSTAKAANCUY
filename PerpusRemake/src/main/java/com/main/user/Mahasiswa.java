@@ -412,4 +412,36 @@ public class Mahasiswa extends User implements MenuInterface  {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    public String getNamaLengkap() {
+        return namaLengkap;
+    }
+
+    public void setNamaLengkap(String namaLengkap) {
+        this.namaLengkap = namaLengkap;
+    }
+
+    public String getNimMahasiswa() {
+        return nimMahasiswa;
+    }
+
+    public void setNimMahasiswa(String nimMahasiswa) {
+        this.nimMahasiswa = nimMahasiswa;
+    }
+
+    public String getProdiMahasiswa() {
+        return prodiMahasiswa;
+    }
+
+    public void setProdiMahasiswa(String prodiMahasiswa) {
+        this.prodiMahasiswa = prodiMahasiswa;
+    }
+
+    public String getFakultasMahasiswa() {
+        return fakultasMahasiswa;
+    }
+
+    public void setFakultasMahasiswa(String fakultasMahasiswa) {
+        this.fakultasMahasiswa = fakultasMahasiswa;
+    }
 }
