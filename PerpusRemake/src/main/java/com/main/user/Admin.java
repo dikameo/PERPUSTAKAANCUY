@@ -3,7 +3,13 @@ package com.main.user;
 import com.main.Main;
 import com.main.database.Book;
 import com.main.inter.MenuInterface;
+<<<<<<< HEAD
 
+=======
+import com.main.exception.illegalAdminAcces;
+import com.main.UI.PropertyMahasiswa;
+import com.main.UI.UIManager;
+>>>>>>> origin/fiture-backend
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,7 +27,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class Admin extends User implements MenuInterface{
+    private TableView tableMahasiswa = new TableView<>();
+    private final String adminUserName = "admin";
+    private final String adminPassword = "admin";
+    private static final ArrayList<Mahasiswa> mahasiswaData = new ArrayList<>();
+    private static final ArrayList<String> mahasiswaList = new ArrayList<>();
 
     @Override
     public void showMenu(Stage primaryStage) {
@@ -31,14 +44,24 @@ public class Admin extends User implements MenuInterface{
         Text sceneTitle = new Text("Admin Menu");
         sceneTitle.setId("welcome-text");
         
+<<<<<<< HEAD
         Button addStudentButton = new Button("Tambahkan Mahasiswa");
         addStudentButton.getStyleClass().add("menu-button");
+=======
+        Button addMahasiswaButton = new Button("Tambahkan Mahasiswa");
+        addMahasiswaButton.getStyleClass().add("menu-button");
+>>>>>>> origin/fiture-backend
         
         Button addBookButton = new Button("Tambahkan Buku");
         addBookButton.getStyleClass().add("menu-button");
         
+<<<<<<< HEAD
         Button checkStudentButton = new Button("Cek Mahasiswa");
         checkStudentButton.getStyleClass().add("menu-button");
+=======
+        Button checkMahasiswaButton = new Button("Cek Mahasiswa");
+        checkMahasiswaButton.getStyleClass().add("menu-button");
+>>>>>>> origin/fiture-backend
         
         Button availableBookButton = new Button("Cek Buku");
         availableBookButton.getStyleClass().add("menu-button");
@@ -50,11 +73,19 @@ public class Admin extends User implements MenuInterface{
         logoutButton.getStyleClass().add("menu-button");
         
         // Mengatur aksi tombol-tombol
+<<<<<<< HEAD
         addStudentButton.setOnAction(e -> showAddMahasiswa(primaryStage));
         addBookButton.setOnAction(e -> showAddBook(primaryStage));
         checkStudentButton.setOnAction(e -> showStudent(primaryStage));
         availableBookButton.setOnAction(e -> showAvailableBook(primaryStage));
         givePenaltyButton.setOnAction(e -> showSanksiStudent(primaryStage));
+=======
+        addMahasiswaButton.setOnAction(e -> showAddMahasiswa(primaryStage));
+        addBookButton.setOnAction(e -> showAddBook(primaryStage));
+        checkMahasiswaButton.setOnAction(e -> showMahasiswa(primaryStage));
+        availableBookButton.setOnAction(e -> showAvailableBook(primaryStage));
+        givePenaltyButton.setOnAction(e -> System.out.println("Sanksi Mahasiswa clicked"));
+>>>>>>> origin/fiture-backend
         logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
         
         // Mengatur tata letak dengan VBox
@@ -63,9 +94,15 @@ public class Admin extends User implements MenuInterface{
         menuLayout.setAlignment(Pos.CENTER);
         menuLayout.getChildren().addAll(
             sceneTitle,
+<<<<<<< HEAD
             addStudentButton,
             addBookButton,
             checkStudentButton,
+=======
+            addMahasiswaButton,
+            addBookButton,
+            checkMahasiswaButton,
+>>>>>>> origin/fiture-backend
             availableBookButton,
             givePenaltyButton,
             logoutButton
@@ -134,7 +171,9 @@ public class Admin extends User implements MenuInterface{
         primaryStage.show();
     }
 
-    public void showStudent(Stage primaryStage){
+    public void showMahasiswa(Stage primaryStage){
+        UIManager.setPreviousLayout(primaryStage.getScene());
+        tableMahasiswa.setEditable(true);
         primaryStage.setTitle("Menu Tabel Mahasiswa");
         TableView<Mahasiswa> table = new TableView<>();
 
@@ -187,6 +226,10 @@ public class Admin extends User implements MenuInterface{
     }
 
     public void showAddMahasiswa(Stage primaryStage){
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/fiture-backend
         primaryStage.setTitle("Pendaftaran Mahasiswa");
 
         // Membuat komponen-komponen UI
@@ -218,6 +261,10 @@ public class Admin extends User implements MenuInterface{
         backButton.setId("btn-outline");
 
         final Text actionTarget = new Text();
+<<<<<<< HEAD
+=======
+        actionTarget.setWrappingWidth(200);
+>>>>>>> origin/fiture-backend
 
         // Mengatur aksi tombol Daftarkan
         btn.setOnAction(e -> {
@@ -365,6 +412,7 @@ public class Admin extends User implements MenuInterface{
         primaryStage.show();
     }
 
+<<<<<<< HEAD
 
     public void showSanksiStudent(Stage primaryStage){
         
@@ -456,5 +504,29 @@ public class Admin extends User implements MenuInterface{
          primaryStage.show();
     }
 
+=======
+    public void addMahasiswa(String namaLengkap, String nimMahasiswa, String prodiMahasiswa, String fakultasMahasiswa){
+        Mahasiswa mahasiswa = new Mahasiswa(namaLengkap, nimMahasiswa, prodiMahasiswa, fakultasMahasiswa);
+        mahasiswaData.add(mahasiswa);
+        mahasiswaList.add(nimMahasiswa);
+    }
+    public boolean isAdmin(String username, String pass) throws illegalAdminAcces {
+        if (username.equals(getAdminUserName()) && pass.equals(getAdminPassword()))
+            return true;
+        else
+            throw new illegalAdminAcces("Kesalahan Input");
+    }
+
+
+    public String getAdminUserName() {
+        return adminUserName;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+
+>>>>>>> origin/fiture-backend
     
 }

@@ -9,8 +9,12 @@ import java.net.URLEncoder;
 import com.main.Main;
 import com.main.database.Book;
 import com.main.inter.MenuInterface;
+<<<<<<< HEAD
 
 import javafx.application.HostServices;
+=======
+import com.main.UI.UIManager;
+>>>>>>> origin/fiture-backend
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -29,11 +33,22 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Mahasiswa extends User implements MenuInterface  {
+<<<<<<< HEAD
     private String nim;
     
     private HostServices hostServices;
     public Mahasiswa(String nim) {
         this.nim = nim;
+=======
+    private String namaLengkap, nimMahasiswa, prodiMahasiswa, fakultasMahasiswa;
+
+    public Mahasiswa(String namaLengkap, String nimMahasiswa, String prodiMahasiswa, String fakultasMahasiswa) {
+
+        this.namaLengkap = namaLengkap;
+        this.nimMahasiswa = nimMahasiswa;
+        this.prodiMahasiswa = prodiMahasiswa;
+        this.fakultasMahasiswa = fakultasMahasiswa;
+>>>>>>> origin/fiture-backend
     }
 
     @Override
@@ -41,7 +56,11 @@ public class Mahasiswa extends User implements MenuInterface  {
         primaryStage.setTitle("User Menu");
 
         // Membuat komponen-komponen UI
+<<<<<<< HEAD
         Text sceneTitle = new Text("User Menu - NIM: " + nim);
+=======
+        Text sceneTitle = new Text("User Menu - NIM: " + nimMahasiswa);
+>>>>>>> origin/fiture-backend
         sceneTitle.setId("welcome-text");
 
         Button borrowBookButton = new Button("Pinjam Buku");
@@ -53,8 +72,11 @@ public class Mahasiswa extends User implements MenuInterface  {
         Button userDataButton = new Button("Data User");
 
         Button notifikasiDendaButton = new Button("Notifikasi Denda");
+<<<<<<< HEAD
 
         Button pengaduanButton = new Button("Pengaduan Mahasiswa");
+=======
+>>>>>>> origin/fiture-backend
 
         Button logoutButton = new Button("Keluar");
 
@@ -64,7 +86,10 @@ public class Mahasiswa extends User implements MenuInterface  {
         availableBooksButton.setOnAction(e -> showAvailableBook(primaryStage));
         userDataButton.setOnAction(e -> showUserData(primaryStage));
         notifikasiDendaButton.setOnAction(e -> showNotifikasiDendaButton(primaryStage));
+<<<<<<< HEAD
         pengaduanButton.setOnAction(e -> showPengaduanButton(primaryStage));
+=======
+>>>>>>> origin/fiture-backend
         logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
 
         // Mengatur tata letak dengan VBox
@@ -77,7 +102,11 @@ public class Mahasiswa extends User implements MenuInterface  {
             tableBorrowedBooksButton,
             availableBooksButton,
             userDataButton,
+<<<<<<< HEAD
             notifikasiDendaButton,pengaduanButton,
+=======
+            notifikasiDendaButton,
+>>>>>>> origin/fiture-backend
             logoutButton
         );
 
@@ -401,6 +430,7 @@ public class Mahasiswa extends User implements MenuInterface  {
         vbox.setAlignment(Pos.CENTER);
         Scene scene = new Scene(vbox, 570, 512);
         scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
+<<<<<<< HEAD
         primaryStage.setTitle("Notifikasi Denda");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -438,13 +468,49 @@ public class Mahasiswa extends User implements MenuInterface  {
         Scene scene = new Scene(vbox, 570, 512);
         scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
 
+=======
+>>>>>>> origin/fiture-backend
         primaryStage.setTitle("Notifikasi Denda");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+<<<<<<< HEAD
 
 
     
 
+=======
+    public String getNamaLengkap() {
+        return namaLengkap;
+    }
+
+    public void setNamaLengkap(String namaLengkap) {
+        this.namaLengkap = namaLengkap;
+    }
+
+    public String getNimMahasiswa() {
+        return nimMahasiswa;
+    }
+
+    public void setNimMahasiswa(String nimMahasiswa) {
+        this.nimMahasiswa = nimMahasiswa;
+    }
+
+    public String getProdiMahasiswa() {
+        return prodiMahasiswa;
+    }
+
+    public void setProdiMahasiswa(String prodiMahasiswa) {
+        this.prodiMahasiswa = prodiMahasiswa;
+    }
+
+    public String getFakultasMahasiswa() {
+        return fakultasMahasiswa;
+    }
+
+    public void setFakultasMahasiswa(String fakultasMahasiswa) {
+        this.fakultasMahasiswa = fakultasMahasiswa;
+    }
+>>>>>>> origin/fiture-backend
 }
