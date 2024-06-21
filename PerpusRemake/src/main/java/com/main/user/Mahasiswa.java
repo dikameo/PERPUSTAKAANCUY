@@ -1,20 +1,11 @@
 package com.main.user;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
 import com.main.Main;
 import com.main.database.Book;
 import com.main.inter.MenuInterface;
-<<<<<<< HEAD
-
-import javafx.application.HostServices;
-=======
 import com.main.UI.UIManager;
->>>>>>> origin/fiture-backend
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -33,13 +24,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Mahasiswa extends User implements MenuInterface  {
-<<<<<<< HEAD
-    private String nim;
-    
-    private HostServices hostServices;
-    public Mahasiswa(String nim) {
-        this.nim = nim;
-=======
     private String namaLengkap, nimMahasiswa, prodiMahasiswa, fakultasMahasiswa;
 
     public Mahasiswa(String namaLengkap, String nimMahasiswa, String prodiMahasiswa, String fakultasMahasiswa) {
@@ -48,7 +32,6 @@ public class Mahasiswa extends User implements MenuInterface  {
         this.nimMahasiswa = nimMahasiswa;
         this.prodiMahasiswa = prodiMahasiswa;
         this.fakultasMahasiswa = fakultasMahasiswa;
->>>>>>> origin/fiture-backend
     }
 
     @Override
@@ -56,11 +39,7 @@ public class Mahasiswa extends User implements MenuInterface  {
         primaryStage.setTitle("User Menu");
 
         // Membuat komponen-komponen UI
-<<<<<<< HEAD
-        Text sceneTitle = new Text("User Menu - NIM: " + nim);
-=======
         Text sceneTitle = new Text("User Menu - NIM: " + nimMahasiswa);
->>>>>>> origin/fiture-backend
         sceneTitle.setId("welcome-text");
 
         Button borrowBookButton = new Button("Pinjam Buku");
@@ -72,11 +51,6 @@ public class Mahasiswa extends User implements MenuInterface  {
         Button userDataButton = new Button("Data User");
 
         Button notifikasiDendaButton = new Button("Notifikasi Denda");
-<<<<<<< HEAD
-
-        Button pengaduanButton = new Button("Pengaduan Mahasiswa");
-=======
->>>>>>> origin/fiture-backend
 
         Button logoutButton = new Button("Keluar");
 
@@ -86,10 +60,6 @@ public class Mahasiswa extends User implements MenuInterface  {
         availableBooksButton.setOnAction(e -> showAvailableBook(primaryStage));
         userDataButton.setOnAction(e -> showUserData(primaryStage));
         notifikasiDendaButton.setOnAction(e -> showNotifikasiDendaButton(primaryStage));
-<<<<<<< HEAD
-        pengaduanButton.setOnAction(e -> showPengaduanButton(primaryStage));
-=======
->>>>>>> origin/fiture-backend
         logoutButton.setOnAction(e -> new Main().pilihanLogin(primaryStage));
 
         // Mengatur tata letak dengan VBox
@@ -102,11 +72,7 @@ public class Mahasiswa extends User implements MenuInterface  {
             tableBorrowedBooksButton,
             availableBooksButton,
             userDataButton,
-<<<<<<< HEAD
-            notifikasiDendaButton,pengaduanButton,
-=======
             notifikasiDendaButton,
->>>>>>> origin/fiture-backend
             logoutButton
         );
 
@@ -418,69 +384,35 @@ public class Mahasiswa extends User implements MenuInterface  {
             alert.setTitle("Notifikasi Denda");
             alert.setHeaderText(null);
             alert.setContentText("Anda sudah melewati batas peminjaman. Silakan hubungi customer service.");
+
+            // alert.showAndWait().ifPresent(response -> {
+            //     try {
+            //         String phoneNumber = "628123456789"; // Ganti dengan nomor WhatsApp customer service
+            //         String message = "Halo, saya membutuhkan bantuan terkait denda peminjaman buku.";
+            //         String url = "https://wa.me/" + phoneNumber + "?text=" + URLEncoder.encode(message, "UTF-8");
+
+            //         hostServices.showDocument(url);
+            //     } catch (Exception ex) {
+            //         ex.printStackTrace();
+            //     }
+            // });
         });
 
 
         Button backButton = new Button("Kembali");
         backButton.setId("btn-outline");
 
-     
+        Main menu = new Main();
         backButton.setOnAction(e -> showMenu(primaryStage));
         VBox vbox = new VBox(dendaButton,backButton);
-        vbox.setAlignment(Pos.CENTER);
+        
         Scene scene = new Scene(vbox, 570, 512);
         scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
-<<<<<<< HEAD
         primaryStage.setTitle("Notifikasi Denda");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-
-     public void showPengaduanButton(Stage primaryStage) {
-        Button pengaduanButton = new Button("Lakukan Pengaduan");
-
-        Button backButton = new Button("Kembali");
-        backButton.setId("btn-outline");
-
-        
-        pengaduanButton.setOnAction(e -> {
-            
-            String googleFormUrl = "https://forms.gle/QkDNhyeA689WLfEZ6";
-
-            try {
-                
-                URI uri = new URI(googleFormUrl);
-
-                
-                Desktop.getDesktop().browse(uri);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-
-        
-        backButton.setOnAction(e -> showMenu(primaryStage));
-
-        VBox vbox = new VBox(pengaduanButton, backButton);
-        vbox.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(vbox, 570, 512);
-        scene.getStylesheets().add(getClass().getResource("stylebaru.css").toExternalForm());
-
-=======
->>>>>>> origin/fiture-backend
-        primaryStage.setTitle("Notifikasi Denda");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-<<<<<<< HEAD
-
-
-    
-
-=======
     public String getNamaLengkap() {
         return namaLengkap;
     }
@@ -512,5 +444,4 @@ public class Mahasiswa extends User implements MenuInterface  {
     public void setFakultasMahasiswa(String fakultasMahasiswa) {
         this.fakultasMahasiswa = fakultasMahasiswa;
     }
->>>>>>> origin/fiture-backend
 }

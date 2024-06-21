@@ -5,7 +5,6 @@ import com.main.UI.UIManager;
 import com.main.user.Admin;
 import com.main.user.Mahasiswa;
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,12 +17,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-<<<<<<< HEAD
- 
-    @Override
-    public void start(Stage primaryStage) {
-        
-=======
     public static void main(String[] args) {
         addUser();
         launch(args);
@@ -33,22 +26,21 @@ public class Main extends Application {
         Mahasiswa mahasiswa2 = new Mahasiswa("AHMAD","202310370311091","FT","INFORMATIKA");
         Mahasiswa mahasiswa3 = new Mahasiswa("Jukii","202310370311071","FT","INFORMATIKA");
         Mahasiswa mahasiswa4 = new Mahasiswa("Natsha","202310370311072","FT","INFORMATIKA");
-//        Admin.getMahasiswaData().add(mahasiswa1);
-//        Admin.getMahasiswaData().add(mahasiswa2);
-//        Admin.getMahasiswaData().add(mahasiswa4);
-//        Admin.getMahasiswaData().add(mahasiswa3);
-////        Book book1 = new Book("UMM-202-301","Ilmu Hitam", "Nyi Towok",100);
-////        book1.setCategory("Sejarah");
-////        User.getBookList().add(book1);
-////        book1.setDuration(9);
-////        mahasiswa1.getBorrowedBooks().add(book1);
+        Admin.getMahasiswaData().add(mahasiswa1);
+        Admin.getMahasiswaData().add(mahasiswa2);
+        Admin.getMahasiswaData().add(mahasiswa4);
+        Admin.getMahasiswaData().add(mahasiswa3);
+//        Book book1 = new Book("UMM-202-301","Ilmu Hitam", "Nyi Towok",100);
+//        book1.setCategory("Sejarah");
+//        User.getBookList().add(book1);
+//        book1.setDuration(9);
+//        mahasiswa1.getBorrowedBooks().add(book1);
     }
     
     
 
     @Override
     public void start(Stage primaryStage)throws Exception {
->>>>>>> origin/fiture-backend
         pilihanLogin(primaryStage);
     }
 
@@ -124,8 +116,6 @@ public class Main extends Application {
         
     }
 
-
-    
 private void loginMahasiswa(Stage primaryStage) {
     primaryStage.setTitle("User Login Form");
 
