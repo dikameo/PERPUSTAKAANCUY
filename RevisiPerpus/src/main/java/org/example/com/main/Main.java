@@ -19,7 +19,8 @@ import java.util.Scanner;
 public class Main extends Application{
     public static void main(String[] args) {
         addUser();
-        launch(args);
+        Admin.sendMail(STYLESHEET_CASPIAN);
+        // launch(args);
     }
     public static void addUser(){
         Mahasiswa mahasiswa1 = new Mahasiswa("AGUS","202310370311080","FT","INFORMATIKA");
@@ -46,7 +47,7 @@ public class Main extends Application{
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
         grid.setHgap(10);
-        grid.setPadding(new Insets(25,25,25,25));
+        grid.setPadding(new Insets(25, 25, 25, 25));
 
         VBox hboxBtn = new VBox(10);
         Button btnLogAdmin = new Button("Login As Admin");
@@ -60,13 +61,12 @@ public class Main extends Application{
         btnExit.setPrefSize(buttonWidth, buttonHeight);
 
         hboxBtn.setAlignment(Pos.CENTER);
-        hboxBtn.getChildren().addAll(btnLogAdmin,btnLogStudent,btnExit);
-        grid.add(hboxBtn,1,3);
+        hboxBtn.getChildren().addAll(btnLogAdmin, btnLogStudent, btnExit);
+        grid.add(hboxBtn, 1, 3);
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
         grid.add(actionTarget, 1, 6);
-
 
         btnLogAdmin.setOnAction(actionEvent -> {
             try {
@@ -79,20 +79,29 @@ public class Main extends Application{
         btnLogStudent.setOnAction(actionEvent -> {
             try {
                 Mahasiswa.logIn(stage);
-            }catch (Exception e){
-                actionTarget.setText("An error occured " + e.getMessage());
+            } catch (Exception e) {
+                actionTarget.setText("An error occurred: " + e.getMessage());
             }
         });
-
 
         btnExit.setOnAction(actionEvent -> {
             try {
                 stage.close();
-            }catch (Exception e){
-                actionTarget.setText("An error occured " + e.getMessage());
-            };
+            } catch (Exception e) {
+                actionTarget.setText("An error occurred: " + e.getMessage());
+            }
         });
-        Scene scene = new Scene(grid, UIManager.getWidth(),UIManager.getHeight());
+
+        Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+
+        // Apply the CSS file with error handling
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
+
         stage.setTitle("PERPUSTAKAAN CUY");
         stage.setScene(scene);
         stage.show();

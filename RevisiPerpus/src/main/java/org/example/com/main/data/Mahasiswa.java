@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,7 +23,9 @@ import org.example.com.main.books.*;
 import org.example.com.main.util.IMenu;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Mahasiswa extends User implements IMenu {
     private String name,faculty,programStudi,NIM;
@@ -47,22 +51,22 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
         Label userName = new Label("NIM:");
-        grid.add(userName, 0, 1); // Kolom 0, Baris 1
+        grid.add(userName, 1, 1); // Kolom 0, Baris 1
 
         TextField fieldNIM = new TextField();
         fieldNIM.setPromptText("Enter your NIM");
-        grid.add(fieldNIM, 1, 1); // Kolom 1, Baris 1
+        grid.add(fieldNIM, 1, 2); // Kolom 1, Baris 1
 
         Button btnSignIn = new Button("SIGN IN");
         Button btnBack = new Button("BACK");
         HBox hBBtn = new HBox(10);
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack, btnSignIn);
-        grid.add(hBBtn, 1, 2);
+        grid.add(hBBtn, 1, 3);
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
-        grid.add(actionTarget, 1, 3);
+        grid.add(actionTarget, 1, 4);
 
         btnSignIn.setOnAction(actionEvent -> {
             if (fieldNIM.getText().isEmpty())
@@ -81,6 +85,12 @@ public class Mahasiswa extends User implements IMenu {
             stage.setScene(UIManager.getPreviousLayout());
         });
         Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("LOGIN MAHASISWA");
         stage.setScene(scene);
         stage.show();
@@ -92,34 +102,93 @@ public class Mahasiswa extends User implements IMenu {
         grid.setHgap(10); // Jarak horizontal antar kolom
         grid.setVgap(10); // Jarak vertikal antar baris
         grid.setPadding(new Insets(25, 25, 25, 25));
-        Text sceneTitle = new Text("Menu Admin");
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
+        Text sceneTitle = new Text("Menu Mahasiswa");
+        
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 32));
+        grid.add(sceneTitle, 2, 0, 3, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
+        
         TableView<PropertyBook> table = super.createTableView(Mahasiswa.getMahasiswaBook());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(145);
+        });
+
+        
+
+
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(table);
-        grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
+        grid.add(vbox, 0, 1,4,1); // Menambahkan TableView ke GridPane
 
-        VBox hBBtn = new VBox(10);
         Button btnBukuT = new Button("Buku Terpinjam");
         Button btnPinjamB = new Button("Pinjam Buku");
         Button btnKembalikanB = new Button("Kembalikan Buku");
         Button btnOut = new Button("Pinjam Buku atau Logout");
         Button btnUpBook = new Button("Update Buku");
-        hBBtn.setAlignment(Pos.CENTER);
-        hBBtn.getChildren().addAll(btnBukuT,btnPinjamB,btnKembalikanB,btnOut,btnUpBook);
-        grid.add(hBBtn,1,3);
 
-        double buttonWidth = 170; // Tentukan lebar tombol
-        double buttonHeight = 30; // Tentukan tinggi tombol
-        btnBukuT.setPrefSize(buttonWidth, buttonHeight);
-        btnPinjamB.setPrefSize(buttonWidth, buttonHeight);
-        btnKembalikanB.setPrefSize(buttonWidth, buttonHeight);
-        btnOut.setPrefSize(buttonWidth, buttonHeight);
-        btnUpBook.setPrefSize(buttonWidth,buttonHeight);
+
+        double width = 50; 
+        double height = 50;
+
+        VBox conBukuT = new VBox(10);
+        Label labelBukuTerpinjam = new Label("    Gunakan menu ini untuk \nmelihat buku yang terpinjam");
+        labelBukuTerpinjam.setPadding(new Insets(10, 10, 10, 10));
+        
+        
+
+        conBukuT.setAlignment(Pos.CENTER);
+        ImageView imgBukuTerpinjam = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imgBukuTerpinjam.setFitWidth(width);
+        imgBukuTerpinjam.setFitHeight(height);
+        conBukuT.setStyle("-fx-background-color: #D3D3D3;");
+        conBukuT.getChildren().addAll(imgBukuTerpinjam,labelBukuTerpinjam,btnBukuT);
+        grid.add(conBukuT,1,3);
+
+        VBox conPinjamBuku = new VBox(10);
+        Label labelPinjamB = new Label("Gunakan menu ini untuk \n    melakukan peminjaman");
+        conPinjamBuku.setAlignment(Pos.CENTER);
+        ImageView imgPinjamB = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imgPinjamB.setFitWidth(width);
+        imgPinjamB.setFitHeight(height);
+        conPinjamBuku.setStyle("-fx-background-color: #D3D3D3;");
+        conPinjamBuku.getChildren().addAll(imgPinjamB,labelPinjamB,btnPinjamB);
+        grid.add(conPinjamBuku,2,3);
+
+        VBox conKembalikanB = new VBox(10);
+        Label labelKembalikanB = new Label("Gunakan menu ini untuk \n  mengembalikan buku");
+        conKembalikanB.setAlignment(Pos.CENTER);
+        ImageView imgKembalikanB = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imgKembalikanB.setFitWidth(width);
+        imgKembalikanB.setFitHeight(height);
+        conKembalikanB.setStyle("-fx-background-color: #D3D3D3;");
+        conKembalikanB.getChildren().addAll(imgKembalikanB,labelKembalikanB,btnKembalikanB);
+        grid.add(conKembalikanB,3,3);
+
+        VBox conUpdateBuku = new VBox(10);
+        Label labelUpdateBuku = new Label("Gunakan menu ini untuk \n    meng-udapte buku");
+        conUpdateBuku.setAlignment(Pos.CENTER);
+        ImageView imgUpdateBuku = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imgUpdateBuku.setFitWidth(width);
+        imgUpdateBuku.setFitHeight(height);
+        conUpdateBuku.setStyle("-fx-background-color: #D3D3D3;");
+        conUpdateBuku.getChildren().addAll(imgUpdateBuku,labelUpdateBuku,btnUpBook);
+        grid.add(conUpdateBuku,1,4);
+
+
+        VBox conOut = new VBox(10);
+        Label labelKeluar = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
+        conOut.setAlignment(Pos.CENTER);
+        ImageView imgKeluar = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imgKeluar.setFitWidth(width);
+        imgKeluar.setFitHeight(height);
+        conOut.setStyle("-fx-background-color: #D3D3D3;");
+        conOut.getChildren().addAll(imgKeluar,labelKeluar,btnOut);
+        grid.add(conOut,2,4);
+
+
+
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
@@ -155,7 +224,13 @@ public class Mahasiswa extends User implements IMenu {
             }
         });
 
-        Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
+        Scene scene = new Scene(grid,UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("MAHASISWA MENU");
         stage.setScene(scene);
         stage.show();
@@ -233,6 +308,12 @@ public class Mahasiswa extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("BOOKS TABLE");
         stage.setScene(scene);
         stage.show();
@@ -317,6 +398,12 @@ public class Mahasiswa extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("BORRWED BOOK MENU");
         stage.setScene(scene);
         stage.show();
@@ -375,6 +462,12 @@ public class Mahasiswa extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("VALIDATION MENU");
         stage.setScene(scene);
         stage.show();
@@ -437,6 +530,12 @@ public class Mahasiswa extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("CHANGE BOOK MENU");
         stage.setScene(scene);
         stage.show();
@@ -536,6 +635,12 @@ public class Mahasiswa extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("RETURN BOOK MENU");
         stage.setScene(scene);
         stage.show();

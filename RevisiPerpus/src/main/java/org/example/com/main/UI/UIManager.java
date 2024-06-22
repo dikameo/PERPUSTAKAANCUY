@@ -9,8 +9,8 @@ import javafx.util.Duration;
 
 public class UIManager{
     private static Scene previousLayout;
-    private static int width = 420;
-    private static int height = 420;
+    private static int width = 800;
+    private static int height = 720;
     public static void setPreviousLayout(Scene scene) {
         previousLayout = scene;
     }

@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -24,6 +26,12 @@ import org.example.com.main.exception.illegalAdminAcces;
 
 import java.io.IOException;
 import java.util.*;
+
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class Admin extends User implements IMenu {
     private TableView tableMahasiswa = new TableView<>();
@@ -44,25 +52,25 @@ public class Admin extends User implements IMenu {
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
         Label userName = new Label("Username:");
-        grid.add(userName, 0, 1); // Kolom 0, Baris 1
+        grid.add(userName, 1, 1); // Kolom 0, Baris 1
 
         TextField inputUserName = new TextField();
         inputUserName.setPromptText("Enter your username");
-        grid.add(inputUserName, 1, 1); // Kolom 1, Baris 1
+        grid.add(inputUserName, 1, 2); // Kolom 1, Baris 1
 
         Label password = new Label("Password : ");
-        grid.add(password, 0, 2);
+        grid.add(password, 1, 3);
 
         PasswordField inputPassword = new PasswordField();
         inputPassword.setPromptText("Enter your password");
-        grid.add(inputPassword, 1, 2);
+        grid.add(inputPassword, 1, 4);
 
         Button btnSignIn = new Button("SIGN IN");
         Button btnBack = new Button("BACK");
         HBox hBBtn = new HBox(10);
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack, btnSignIn);
-        grid.add(hBBtn, 1, 3);
+        grid.add(hBBtn, 1, 5);
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
@@ -86,7 +94,13 @@ public class Admin extends User implements IMenu {
             stage.setScene(UIManager.getPreviousLayout());
         });
 
-        Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getWidth());
+        Scene scene = new Scene(grid, 820, 420);
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("LOGIN ADMIN");
         stage.setScene(scene);
         stage.show();
@@ -103,26 +117,87 @@ public class Admin extends User implements IMenu {
         sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
-        VBox hBBtn = new VBox(10);
+    
         Button btnaddMahasiswa = new Button("Add Mahasiswa");
         Button btnAddBook = new Button("Add Book");
         Button btnDisplayMahasiswa = new Button("Display Registered Mahasiswa");
         Button btnDisplayBook = new Button("Display Book");
         Button btnEditBook = new Button("Edit Book");
         Button btnLogOut = new Button("Log Out");
-        hBBtn.setAlignment(Pos.CENTER);
-        hBBtn.getChildren().addAll(btnaddMahasiswa, btnAddBook, btnDisplayMahasiswa, btnDisplayBook, btnEditBook,
-                btnLogOut);
-        grid.add(hBBtn, 1, 3);
 
-        double buttonWidth = 170; // Tentukan lebar tombol
-        double buttonHeight = 30; // Tentukan tinggi tombol
-        btnaddMahasiswa.setPrefSize(buttonWidth, buttonHeight);
-        btnAddBook.setPrefSize(buttonWidth, buttonHeight);
-        btnDisplayBook.setPrefSize(buttonWidth, buttonHeight);
-        btnDisplayMahasiswa.setPrefSize(buttonWidth, buttonHeight);
-        btnEditBook.setPrefSize(buttonWidth, buttonHeight);
-        btnLogOut.setPrefSize(buttonWidth, buttonHeight);
+        double width = 50; 
+        double height = 50;
+        VBox conAddMahasiswa = new VBox(10);
+        Label labelAddMahasiswa = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        conAddMahasiswa.setAlignment(Pos.CENTER);
+        ImageView imageViewStudent = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imageViewStudent.setFitWidth(width);
+        imageViewStudent.setFitHeight(height);
+        conAddMahasiswa.setStyle("-fx-background-color: #D3D3D3;");
+        conAddMahasiswa.getChildren().addAll(imageViewStudent,labelAddMahasiswa,btnaddMahasiswa);
+        grid.add(conAddMahasiswa,1,3);
+
+
+        VBox conAddBook = new VBox(10);
+        Label labelAddBook = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        conAddBook.setAlignment(Pos.CENTER);
+        ImageView imageViewAddBook = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imageViewAddBook.setFitWidth(width);
+        imageViewAddBook.setFitHeight(height);
+        btnAddBook.getStyleClass().add("btnMenu");
+        conAddBook.setStyle("-fx-background-color: #D3D3D3;");
+        conAddBook.getChildren().addAll(imageViewAddBook,labelAddBook,btnAddBook);
+        grid.add(conAddBook,2,3);
+
+
+        VBox conDisplayMahasiswa = new VBox(10);
+        Label labelDisplayMahasiswa = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        conDisplayMahasiswa.setAlignment(Pos.CENTER);
+        ImageView imageViewDisplayMahasiswa = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imageViewDisplayMahasiswa.setFitWidth(width);
+        imageViewDisplayMahasiswa.setFitHeight(height);
+        btnAddBook.getStyleClass().add("btnMenu");
+        conDisplayMahasiswa.setStyle("-fx-background-color: #D3D3D3;");
+        conDisplayMahasiswa.getChildren().addAll(imageViewDisplayMahasiswa,labelDisplayMahasiswa,btnDisplayMahasiswa);
+        grid.add(conDisplayMahasiswa,3,3);
+
+        
+        VBox conDisplayBook = new VBox(10);
+        Label labelDisplayBook = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        conDisplayBook.setAlignment(Pos.CENTER);
+        ImageView imageViewDisplayBook = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imageViewDisplayBook.setFitWidth(width);
+        imageViewDisplayBook.setFitHeight(height);
+        btnAddBook.getStyleClass().add("btnMenu");
+        conDisplayBook.setStyle("-fx-background-color: #D3D3D3;");
+        conDisplayBook.getChildren().addAll(imageViewDisplayBook,labelDisplayBook,btnDisplayBook);
+        grid.add(conDisplayBook,1,4);
+
+        VBox conEditBook = new VBox(10);
+        Label labelEditBook = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        conEditBook.setAlignment(Pos.CENTER);
+        ImageView imageEditBook = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imageEditBook.setFitWidth(width);
+        imageEditBook.setFitHeight(height);
+        btnAddBook.getStyleClass().add("btnMenu");
+        conEditBook.setStyle("-fx-background-color: #D3D3D3;");
+        conEditBook.getChildren().addAll(imageEditBook,labelEditBook,btnEditBook);
+        grid.add(conEditBook,2,4);
+
+
+        VBox conLogout = new VBox(10);
+        Label labelLogout = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        conLogout.setAlignment(Pos.CENTER);
+        ImageView imageLogout = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        imageLogout.setFitWidth(width);
+        imageLogout.setFitHeight(height);
+        btnAddBook.getStyleClass().add("btnMenu");
+        conLogout.setStyle("-fx-background-color: #D3D3D3;");
+        conLogout.getChildren().addAll(imageLogout,labelLogout,btnLogOut);
+        grid.add(conLogout,3,4);
+
+
+       
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
@@ -134,7 +209,7 @@ public class Admin extends User implements IMenu {
             } catch (Exception e) {
                 UIManager.showError(actionTarget, e.getMessage());
             }
-            ;
+            
         });
 
         btnAddBook.setOnAction(actionEvent -> {
@@ -170,6 +245,12 @@ public class Admin extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("ADMIN MENU");
         stage.setScene(scene);
         stage.show();
@@ -242,6 +323,12 @@ public class Admin extends User implements IMenu {
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
         stage.setTitle("ADD Mahasiswa MENU");
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setScene(scene);
         stage.show();
     }
@@ -293,6 +380,18 @@ public class Admin extends User implements IMenu {
         });
 
         tableMahasiswa.setItems(data);
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setScene(scene);
         stage.setTitle("TABLE REGISTERED Mahasiswa");
         stage.show();
@@ -385,6 +484,12 @@ public class Admin extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("ADD BOOK MENU");
         stage.setScene(scene);
         stage.show();
@@ -445,6 +550,12 @@ public class Admin extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("EDIT BOOK MEMU");
         stage.setScene(scene);
         stage.show();
@@ -484,6 +595,12 @@ public class Admin extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("DISPLAY AVAILABE BOOKS");
         stage.setScene(scene);
         stage.show();
@@ -586,6 +703,12 @@ public class Admin extends User implements IMenu {
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
         stage.setTitle("CHANGE BOOK INFORMATION MENU");
         stage.setScene(scene);
         stage.show();
@@ -635,5 +758,50 @@ public class Admin extends User implements IMenu {
 
     public String getAdminPassword() {
         return adminPassword;
+    }
+
+
+    public static void sendMail(String message){
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
+        props.put("mail.smtp.port", "587"); // TLS Port
+        props.put("mail.smtp.auth", "true"); // Enable authentication
+        props.put("mail.smtp.starttls.enable", "true"); // Enable STARTTLS
+
+        String mainEmail = "perpusahmadidka@gmail.com";
+        String password = "ibyt sqjx ovmk vnwq";
+
+        // Create a Session with the specified properties
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(mainEmail, password);
+            }
+        });
+        // Email details
+        String toEmail = "idikach30@gmail.com";
+        String subject = "PERPUSTAKAAN";
+        String body = "UJI CUY";
+
+
+         try {
+            MimeMessage msg = new MimeMessage(session);
+            // Set message headers
+            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+            msg.addHeader("format", "flowed");
+            msg.addHeader("Content-Transfer-Encoding", "8bit");
+
+            msg.setFrom(new InternetAddress(mainEmail, "NoReply-JD"));
+            msg.setReplyTo(InternetAddress.parse(mainEmail, false));
+            msg.setSubject(subject, "UTF-8");
+            msg.setText(body, "UTF-8");
+            msg.setSentDate(new Date());
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+            System.out.println("Message is ready");
+            Transport.send(msg);
+            System.out.println("Email Sent Successfully!!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
