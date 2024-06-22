@@ -1,5 +1,5 @@
 .grid {
-    -fx-background-color: #f0f8ff;
+    -fx-background-color: #ffffff;
 }
 
 /* Menetapkan gaya ke TextField */
@@ -21,11 +21,14 @@
 }
 
 #paragraph{
-    -fx-font-weight: 500;
+    -fx-font-weight: normal;
+    -fx-font-size: 12px;
+    
+
 }
 
 #backgroundMenu{
-    -fx-background-color: #c6c6c6;
+    -fx-background-color: #FFFFFF;
 }
 
 .button {

@@ -39,6 +39,10 @@ public class Mahasiswa extends User implements IMenu {
         this.faculty = faculty;
         this.programStudi = programStudi;
     }
+
+    public Mahasiswa(){
+        
+    }
     public static void logIn(Stage stage){
         UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
         GridPane grid = new GridPane();
@@ -105,87 +109,86 @@ public class Mahasiswa extends User implements IMenu {
         Text sceneTitle = new Text("Menu Mahasiswa");
         
         sceneTitle.setFont(Font.font("Tahoma", FontWeight.BOLD, 32));
-        grid.add(sceneTitle, 2, 0, 3, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
-
-        
-        TableView<PropertyBook> table = super.createTableView(Mahasiswa.getMahasiswaBook());
-        table.getColumns().forEach(column -> {
-            column.setPrefWidth(145);
-        });
-
-        
-
-
-        VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(table);
-        grid.add(vbox, 0, 1,4,1); // Menambahkan TableView ke GridPane
+        grid.add(sceneTitle, 2, 0, 3, 1);
 
         Button btnBukuT = new Button("Buku Terpinjam");
         Button btnPinjamB = new Button("Pinjam Buku");
         Button btnKembalikanB = new Button("Kembalikan Buku");
         Button btnOut = new Button("Pinjam Buku atau Logout");
         Button btnUpBook = new Button("Update Buku");
+        Button btnDenda = new Button("Denda Buku");
 
 
         double width = 50; 
         double height = 50;
 
         VBox conBukuT = new VBox(10);
-        Label labelBukuTerpinjam = new Label("    Gunakan menu ini untuk \nmelihat buku yang terpinjam");
-        labelBukuTerpinjam.setPadding(new Insets(10, 10, 10, 10));
-        
-        
-
+        Label labelBukuTerpinjam = new Label(" Gunakan menu ini untuk melihat\n         buku yang terpinjam");
+        labelBukuTerpinjam.setId("paragraph");
         conBukuT.setAlignment(Pos.CENTER);
-        ImageView imgBukuTerpinjam = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        ImageView imgBukuTerpinjam = new ImageView(new Image(Main.class.getResourceAsStream("img/Buku.png")));
         imgBukuTerpinjam.setFitWidth(width);
         imgBukuTerpinjam.setFitHeight(height);
-        conBukuT.setStyle("-fx-background-color: #D3D3D3;");
+        // conBukuT.setStyle("-fx-background-color: #D3D3D3;");
         conBukuT.getChildren().addAll(imgBukuTerpinjam,labelBukuTerpinjam,btnBukuT);
         grid.add(conBukuT,1,3);
 
         VBox conPinjamBuku = new VBox(10);
         Label labelPinjamB = new Label("Gunakan menu ini untuk \n    melakukan peminjaman");
+        labelPinjamB.setId("paragraph");
         conPinjamBuku.setAlignment(Pos.CENTER);
-        ImageView imgPinjamB = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        ImageView imgPinjamB = new ImageView(new Image(Main.class.getResourceAsStream("img/Pinjam.png")));
         imgPinjamB.setFitWidth(width);
         imgPinjamB.setFitHeight(height);
-        conPinjamBuku.setStyle("-fx-background-color: #D3D3D3;");
         conPinjamBuku.getChildren().addAll(imgPinjamB,labelPinjamB,btnPinjamB);
         grid.add(conPinjamBuku,2,3);
 
         VBox conKembalikanB = new VBox(10);
         Label labelKembalikanB = new Label("Gunakan menu ini untuk \n  mengembalikan buku");
+        labelKembalikanB.setId("paragraph");
         conKembalikanB.setAlignment(Pos.CENTER);
-        ImageView imgKembalikanB = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        ImageView imgKembalikanB = new ImageView(new Image(Main.class.getResourceAsStream("img/Kembali.png")));
         imgKembalikanB.setFitWidth(width);
         imgKembalikanB.setFitHeight(height);
-        conKembalikanB.setStyle("-fx-background-color: #D3D3D3;");
+
         conKembalikanB.getChildren().addAll(imgKembalikanB,labelKembalikanB,btnKembalikanB);
         grid.add(conKembalikanB,3,3);
 
         VBox conUpdateBuku = new VBox(10);
         Label labelUpdateBuku = new Label("Gunakan menu ini untuk \n    meng-udapte buku");
+        labelUpdateBuku.setId("paragraph");
         conUpdateBuku.setAlignment(Pos.CENTER);
-        ImageView imgUpdateBuku = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        ImageView imgUpdateBuku = new ImageView(new Image(Main.class.getResourceAsStream("img/Update.png")));
         imgUpdateBuku.setFitWidth(width);
         imgUpdateBuku.setFitHeight(height);
-        conUpdateBuku.setStyle("-fx-background-color: #D3D3D3;");
         conUpdateBuku.getChildren().addAll(imgUpdateBuku,labelUpdateBuku,btnUpBook);
         grid.add(conUpdateBuku,1,4);
 
 
+        VBox conDenda = new VBox(10);
+        Label labelDenda = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
+        labelDenda.setId("paragraph");
+        conDenda.setAlignment(Pos.CENTER);
+        ImageView imgDenda = new ImageView(new Image(Main.class.getResourceAsStream("img/Denda.png")));
+        imgDenda.setFitWidth(width);
+        imgDenda.setFitHeight(height);
+        // conDenda.setStyle("-fx-background-color: #D3D3D3;");
+        conDenda.getChildren().addAll(imgDenda,labelDenda,btnDenda);
+        grid.add(conDenda,2,4);
+
         VBox conOut = new VBox(10);
         Label labelKeluar = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
+        labelKeluar.setId("paragraph");
         conOut.setAlignment(Pos.CENTER);
-        ImageView imgKeluar = new ImageView(new Image(Main.class.getResourceAsStream("img/student.png")));
+        ImageView imgKeluar = new ImageView(new Image(Main.class.getResourceAsStream("img/Keluar.png")));
         imgKeluar.setFitWidth(width);
         imgKeluar.setFitHeight(height);
-        conOut.setStyle("-fx-background-color: #D3D3D3;");
+        // conOut.setStyle("-fx-background-color: #D3D3D3;");
         conOut.getChildren().addAll(imgKeluar,labelKeluar,btnOut);
-        grid.add(conOut,2,4);
+        grid.add(conOut,3,4);
+
+        
+
 
 
 
@@ -196,6 +199,7 @@ public class Mahasiswa extends User implements IMenu {
 
         btnBukuT.setOnAction(actionEvent -> {
             this.displayBook(stage);
+            // System.out.println("jalan");
         });
 
         btnPinjamB.setOnAction(actionEvent -> {
@@ -224,7 +228,12 @@ public class Mahasiswa extends User implements IMenu {
             }
         });
 
-        Scene scene = new Scene(grid,UIManager.getWidth(), UIManager.getHeight());
+
+        btnDenda.setOnAction(actionEvent ->{
+            System.out.println("denda");
+        });
+
+        Scene scene = new Scene(grid,UIManager.getWidth(), UIManager.getWidth());
         try {
             scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         } catch (NullPointerException e) {
@@ -286,11 +295,10 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
         TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
-        VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(table);
-        grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
+        grid.add(table, 0, 1, 5, 1); // Menambahkan TableView ke GridPane
 
         HBox hBBtn = new HBox(10);
         Button btnBack = new Button("BACK");
@@ -332,6 +340,9 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
         TableView<PropertyBook> table = super.createTableView(getMahasiswaBook());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -433,6 +444,9 @@ public class Mahasiswa extends User implements IMenu {
             }
         }
         TableView<PropertyBook> table = createTableView(selectionArr);
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -485,28 +499,33 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
         TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(table);
         grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
 
-        Label id = new Label("ID");
+        Label note = new Label("Masukkan ID buku yang tersedia pada tabel diatas");
         TextField fieldId = new TextField();
         fieldId.setPromptText("Enter book Id");
-        grid.add(id,0,2);
-        grid.add(fieldId,1,2);
+        grid.add(note,0,2,5,1);
+        grid.add(fieldId,0,3,4,1);
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
-        grid.add(actionTarget, 1, 4);
+        grid.add(actionTarget, 0, 4,4,1);
+
 
         HBox hBBtn = new HBox(10);
-        Button btnReturn = new Button("RETURN BOOK");
+        Button btnReturn = new Button("EDIT BOOK");
         Button btnBack = new Button("BACK");
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack,btnReturn);
-        grid.add(hBBtn,1,5);
+        grid.add(hBBtn,0,4,1,1);
+
 
         btnReturn.setOnAction(actionEvent -> {
             if (fieldId.getText().isEmpty()) {
@@ -592,29 +611,32 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
         TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
         vbox.getChildren().addAll(table);
         grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
 
-        Label id = new Label("ID");
+        Label note = new Label("Masukkan ID buku yang tersedia pada tabel diatas");
         TextField fieldId = new TextField();
         fieldId.setPromptText("Enter book Id");
-        grid.add(id,0,2);
-        grid.add(fieldId,1,2);
+        grid.add(note,0,2,5,1);
+        grid.add(fieldId,0,3,4,1);
 
         HBox hBBtn = new HBox(10);
         Button btnReturn = new Button("EDIT BOOK");
         Button btnBack = new Button("BACK");
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack,btnReturn);
-        grid.add(hBBtn,1,3);
+        grid.add(hBBtn,0,5);
 
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
-        grid.add(actionTarget, 1, 4);
+        grid.add(actionTarget, 0, 4,4,1);
 
         btnReturn.setOnAction(actionEvent -> {
             if (fieldId.getText().isEmpty()) {
@@ -658,6 +680,9 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(sceneTitle,0,0,2,1);
 
         TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
         VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));

@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -19,8 +21,8 @@ import java.util.Scanner;
 public class Main extends Application{
     public static void main(String[] args) {
         addUser();
-        Admin.sendMail(STYLESHEET_CASPIAN);
-        // launch(args);
+        // Admin.sendMail(STYLESHEET_CASPIAN);
+        launch(args);
     }
     public static void addUser(){
         Mahasiswa mahasiswa1 = new Mahasiswa("AGUS","202310370311080","FT","INFORMATIKA");
@@ -49,6 +51,11 @@ public class Main extends Application{
         grid.setHgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
+        double width = 462; 
+        double height = 100;
+        ImageView imageViewLogo = new ImageView(new Image(Main.class.getResourceAsStream("img/LOGO.png")));
+        imageViewLogo.setFitWidth(width);
+        imageViewLogo.setFitHeight(height);
         VBox hboxBtn = new VBox(10);
         Button btnLogAdmin = new Button("Login As Admin");
         Button btnLogStudent = new Button("Login As Mahasiswa");
@@ -61,7 +68,7 @@ public class Main extends Application{
         btnExit.setPrefSize(buttonWidth, buttonHeight);
 
         hboxBtn.setAlignment(Pos.CENTER);
-        hboxBtn.getChildren().addAll(btnLogAdmin, btnLogStudent, btnExit);
+        hboxBtn.getChildren().addAll(imageViewLogo,btnLogAdmin, btnLogStudent, btnExit);
         grid.add(hboxBtn, 1, 3);
 
         final Text actionTarget = new Text();
