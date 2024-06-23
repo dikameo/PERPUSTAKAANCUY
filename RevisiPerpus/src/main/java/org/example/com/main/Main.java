@@ -34,6 +34,7 @@ public class Main extends Application{
         Admin.getMahasiswaData().add(mahasiswa3);
         Admin.getMahasiswaData().add(mahasiswa4);
         Book book1 = new Book("UMM-202-301","Ilmu Hitam", "Nyi Towok",100);
+        Book book2 = new Book("UMM-512-131","Ilmu alam", "Naga Sakti",100);
         book1.setCategory("Sejarah");
         User.getBookList().add(book1);
         book1.setDuration(9);
@@ -132,6 +133,11 @@ public class Main extends Application{
     public static void addTempBook(Mahasiswa mahasiswa, int numberBorrowed, String[][] arr) {
         for (int i = 0; i < numberBorrowed; i++)
             mahasiswa.choiceBook(arr[i][0],Integer.parseInt(arr[i][1]));
+    }
+
+    public static void addTempBookAdmin(Admin admin, int numberBorrowed, String[][] arr) {
+        for (int i = 0; i < numberBorrowed; i++)
+            admin.choiceBook(arr[i][0],Integer.parseInt(arr[i][1]));
     }
 
 }

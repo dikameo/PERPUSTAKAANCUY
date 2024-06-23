@@ -222,11 +222,11 @@ public class Mahasiswa extends User implements IMenu {
         });
 
         btnOut.setOnAction(actionEvent -> {
-            if (numberBorroewd > 0){
-                keepBooks(stage);
-            }else {
+            // if (numberBorroewd > 0){
+                // keepBooks(stage);
+            // }else {
                 logOut(stage);
-            }
+            // }
         });
 
 
@@ -401,6 +401,7 @@ public class Mahasiswa extends User implements IMenu {
                 numberBorroewd++;
                 book.setStock(book.getStock() - 1);
                 UIManager.showSuccess(actionTarget, "BOOK ADDED SUCCESSFULLY");
+                keepBooks(stage);
             } catch (NumberFormatException e) {
                 UIManager.showError(actionTarget, "INPUT VALID NUMBER DURATION");
             }
@@ -469,12 +470,14 @@ public class Mahasiswa extends User implements IMenu {
         btnSave.setOnAction(actionEvent -> {
             Main.addTempBook(this,numberBorroewd,tempBook);
             UIManager.showSuccess(actionTarget,"BOO HAS BEEN SAVE");
-            logOut(stage);
+            // logOut(stage);
+            menu(stage);
         });
 
         btnNo.setOnAction(e -> {
             UIManager.showError(actionTarget,"BOOK DOESNT SAVED");
-            logOut(stage);
+            // logOut(stage);
+            menu(stage);
         });
 
         Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
