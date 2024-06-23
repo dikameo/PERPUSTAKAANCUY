@@ -357,20 +357,26 @@ public class Admin extends User implements IMenu {
         inputProgram.setPromptText("Enter mahasiswa program");
         grid.add(inputProgram, 1, 4);
 
+        Label email = new Label("Email");
+        grid.add(email, 0, 5);
+        TextField inputEmail= new TextField();
+        inputEmail.setPromptText("Enter mahasiswa email");
+        grid.add(inputEmail, 1, 5);
+
         Button btnSubmit = new Button("SUBMIT");
         Button btnBack = new Button("BACK");
         HBox hBBtn = new HBox(10);
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack, btnSubmit);
-        grid.add(hBBtn, 1, 5);
+        grid.add(hBBtn, 1, 6);
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
-        grid.add(actionTarget, 1, 6);
+        grid.add(actionTarget, 1, 7);
 
         btnSubmit.setOnAction(actionEvent -> {
             Mahasiswa mahasiswa = Main.checkNIM(inputName.getText(), inputNIM.getText(), inputFaculty.getText(),
-                    inputProgram.getText());
+                    inputProgram.getText(),inputEmail.getText());
             if (inputName.getText().isEmpty() || inputNIM.getText().isEmpty() || inputFaculty.getText().isEmpty()
                     || inputProgram.getText().isEmpty())
                 UIManager.showError(actionTarget, "PLEASE FILL ALL BLANKS");
@@ -378,7 +384,7 @@ public class Admin extends User implements IMenu {
                 UIManager.showError(actionTarget, "NIM SAME");
             else {
                 Main.addTempMahasiswa(this, inputName.getText(), inputNIM.getText(), inputFaculty.getText(),
-                        inputProgram.getText());
+                        inputProgram.getText(),inputEmail.getText());
                 UIManager.showSuccess(actionTarget, "MAHASISWA ADDED SUCCESSFULY");
             }
         });
@@ -408,18 +414,21 @@ public class Admin extends User implements IMenu {
         TableColumn<Mahasiswa, String> nimCol = new TableColumn<>("NIM");
         TableColumn<Mahasiswa, String> facultyCol = new TableColumn<>("Faculty");
         TableColumn<Mahasiswa, String> prodiCol = new TableColumn<>("Program Studi");
+        TableColumn<Mahasiswa, String> emailCol = new TableColumn<>("Email");
 
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         nimCol.setCellValueFactory(new PropertyValueFactory<>("nim"));
         facultyCol.setCellValueFactory(new PropertyValueFactory<>("faculty"));
         prodiCol.setCellValueFactory(new PropertyValueFactory<>("programStudi"));
-        tableMahasiswa.getColumns().addAll(nameCol, nimCol, facultyCol, prodiCol);
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tableMahasiswa.getColumns().addAll(nameCol, nimCol, facultyCol, prodiCol, emailCol);
 
 
         nameCol.setPrefWidth(148);
         nimCol.setPrefWidth(148);
         facultyCol.setPrefWidth(148);
         prodiCol.setPrefWidth(148);
+        emailCol.setPrefWidth(148);
         
         Button backBtn = new Button("Back");
         GridPane gridPane = new GridPane();
@@ -519,31 +528,28 @@ public class Admin extends User implements IMenu {
                 try {
                     Book book;
                     if (categoryValue.equals("Manajemen"))
-                        book = new Fiksi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Manajemen(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else if (categoryValue.equals("Novel"))
-                        book = new Sejarah(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Novel(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else if (categoryValue.equals("Ekonomi"))
-                        book = new NonFiksi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Ekonomi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else if (categoryValue.equals("Hukum"))
-                        book = new Teknologi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Hukum(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else if (categoryValue.equals("Sejarah"))
-                        book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
-                                Integer.parseInt(fieldStock.getText()));
-                    else if (categoryValue.equals("Agama"))
-                        book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Sejarah(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else if (categoryValue.equals("Psikologi"))
-                        book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Psikologi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else if (categoryValue.equals("Teknologi"))
-                        book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Teknologi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else
-                        book = new StoryBook(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                        book = new Agama(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     super.addBook(book);
                     UIManager.showSuccess(actionTarget, "BOOK SUCESSFLY ADDED");
@@ -717,7 +723,7 @@ public class Admin extends User implements IMenu {
         grid.add(categoryLabel, 0, 1);
 
         ComboBox<String> categoryComboBox = new ComboBox<>();
-        categoryComboBox.getItems().addAll("Sejarah","Story","Fiksi","NonFiksi","Sains","Teknologi");
+        categoryComboBox.getItems().addAll("Sejarah","Manajemen","Novel","Agama","Ekonomi","Teknologi","Psikologi","Hukum");
         categoryComboBox.setPromptText("Select category");
         grid.add(categoryComboBox, 1, 1);
 
@@ -788,8 +794,8 @@ public class Admin extends User implements IMenu {
         stage.show();
     }
 
-    public void addMahasiswa(String name, String NIM, String faculy, String program) {
-        Mahasiswa mahasiswa = new Mahasiswa(name, NIM, faculy, program);
+    public void addMahasiswa(String name, String NIM, String faculy, String program, String email) {
+        Mahasiswa mahasiswa = new Mahasiswa(name, NIM, faculy, program, email);
         MAHASISWA_DATA.add(mahasiswa);
         mahasiswaList.add(NIM);
     }
