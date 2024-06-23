@@ -25,10 +25,10 @@ public class Main extends Application{
         launch(args);
     }
     public static void addUser(){
-        Mahasiswa mahasiswa1 = new Mahasiswa("AGUS","202310370311080","FT","INFORMATIKA");
-        Mahasiswa mahasiswa2 = new Mahasiswa("AHMAD","202310370311091","FT","INFORMATIKA");
-        Mahasiswa mahasiswa3 = new Mahasiswa("Jukii","202310370311071","FT","INFORMATIKA");
-        Mahasiswa mahasiswa4 = new Mahasiswa("Natsha","202310370311072","FT","INFORMATIKA");
+        Mahasiswa mahasiswa1 = new Mahasiswa("AGUS","202310370311080","FT","INFORMATIKA","idikach30@gmail.com");
+        Mahasiswa mahasiswa2 = new Mahasiswa("AHMAD","202310370311091","FT","INFORMATIKA","bijuudama30@gmail.com");
+        Mahasiswa mahasiswa3 = new Mahasiswa("Jukii","202310370311071","FT","INFORMATIKA","bijuudama45@gmail.com");
+        Mahasiswa mahasiswa4 = new Mahasiswa("Natsha","202310370311072","FT","INFORMATIKA","bijuudama53@gmail.com");
         Admin.getMahasiswaData().add(mahasiswa1);
         Admin.getMahasiswaData().add(mahasiswa2);
         Admin.getMahasiswaData().add(mahasiswa3);
@@ -40,7 +40,7 @@ public class Main extends Application{
         mahasiswa1.getBorrowedBooks().add(book1);
     }
 
-    @Override
+        @Override
     public void start(Stage stage) throws Exception {
         menu(stage);
     }
@@ -117,17 +117,17 @@ public class Main extends Application{
         Scanner inputObj = new Scanner(System.in);
         return inputObj.nextLine();
     }
-    public static void addTempMahasiswa(Admin admin,String name,String NIM, String faculty, String program) {
-        admin.addMahasiswa(name,NIM,faculty,program);
+    public static void addTempMahasiswa(Admin admin,String name,String NIM, String faculty, String program, String email) {
+        admin.addMahasiswa(name,NIM,faculty,program, email);
     }
 
-    public static Mahasiswa checkNIM(String name, String NIM, String faculty, String program) {
+    public static Mahasiswa checkNIM(String name, String NIM, String faculty, String program, String email) {
         for (Mahasiswa x : Admin.getMahasiswaData()) {
             if (x.getNIM().equals(NIM)) {
                 return null;
             }
         }
-        return new Mahasiswa(name, NIM, faculty, program);
+        return new Mahasiswa(name, NIM, faculty, program, email);
     }
     public static void addTempBook(Mahasiswa mahasiswa, int numberBorrowed, String[][] arr) {
         for (int i = 0; i < numberBorrowed; i++)

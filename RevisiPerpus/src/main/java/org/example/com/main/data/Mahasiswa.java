@@ -28,16 +28,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Mahasiswa extends User implements IMenu {
-    private String name,faculty,programStudi,NIM;
+    private String name,faculty,programStudi,NIM,email;
     private ArrayList<Book> borrowedBooks= new ArrayList<>();
     private static ArrayList<Book> mahasiswaBook = new ArrayList<>();
     private static String[][] tempBook = new String[10][10];
     private static int numberBorroewd = 0;
-    public Mahasiswa(String name, String NIM, String faculty, String programStudi){
+    public Mahasiswa(String name, String NIM, String faculty, String programStudi, String email){
         this.name = name;
         this.NIM = NIM;
         this.faculty = faculty;
         this.programStudi = programStudi;
+        this.email = email;
     }
 
     public Mahasiswa(){
@@ -391,8 +392,8 @@ public class Mahasiswa extends User implements IMenu {
             }
 
             try {
-                if (Integer.parseInt(fieldDuration.getText()) >= 15) {
-                    UIManager.showError(actionTarget, "DURATION MUST BE LOWER THAN 15");
+                if (Integer.parseInt(fieldDuration.getText()) >= 7) {
+                    UIManager.showError(actionTarget, "DURATION MUST BE LOWER THAN 7");
                     return;
                 }
                 tempBook[numberBorroewd][0] = book.getBookId();
@@ -521,7 +522,7 @@ public class Mahasiswa extends User implements IMenu {
 
 
         HBox hBBtn = new HBox(10);
-        Button btnReturn = new Button("EDIT BOOK");
+        Button btnReturn = new Button("KEMBALIKAN BOOK");
         Button btnBack = new Button("BACK");
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack,btnReturn);
@@ -760,26 +761,15 @@ public class Mahasiswa extends User implements IMenu {
         vbox.getChildren().addAll(table);
         grid.add(vbox, 0, 1, 2, 1);
 
-        Label name = new Label("Masukkan Gmail anda untuk Konfirmasi denda");
-        grid.add(name, 0, 2); // Kolom 0, Baris 1
-        TextField inputName = new TextField();
-        inputName.setPromptText("Enter Alamat Gmail anda");
-        grid.add(inputName, 0, 3,2,1); // Kolom 1, Baris 1
-
-        Button btnSubmit = new Button("KIRIM DENDA");
         Button btnBack = new Button("BACK");
         HBox hBBtn = new HBox(10);
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hBBtn.getChildren().addAll(btnBack, btnSubmit);
+        hBBtn.getChildren().addAll(btnBack);
         grid.add(hBBtn, 0, 5);
 
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
         grid.add(actionTarget, 1, 4);
-
-        btnSubmit.setOnAction(actionEvent -> {
-           System.out.println("CEK GMAIL");
-        });
 
         btnBack.setOnAction(actionEvent -> {
             stage.setScene(UIManager.getPreviousLayout());
@@ -891,5 +881,8 @@ public class Mahasiswa extends User implements IMenu {
 
     public String getNIM(){
         return this.NIM;
+    }
+    public String getEmail(){
+        return email;
     }
 }
