@@ -41,7 +41,7 @@ public class Mahasiswa extends User implements IMenu {
     }
 
     public Mahasiswa(){
-        
+
     }
     public static void logIn(Stage stage){
         UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
@@ -230,7 +230,8 @@ public class Mahasiswa extends User implements IMenu {
 
 
         btnDenda.setOnAction(actionEvent ->{
-            System.out.println("denda");
+            // System.out.println("denda");
+            displayDenda(stage);
         });
 
         Scene scene = new Scene(grid,UIManager.getWidth(), UIManager.getWidth());
@@ -734,6 +735,66 @@ public class Mahasiswa extends User implements IMenu {
             menu(stage);
         });
 
+    }
+
+
+    public void displayDenda(Stage stage){
+        UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10); // Jarak horizontal antar kolom
+        grid.setVgap(10); // Jarak vertikal antar baris
+        grid.setPadding(new Insets(25, 25, 25, 25));
+        Text sceneTitle = new Text("Buku yang terlambat dikembalikan");
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
+
+        TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
+
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(table);
+        grid.add(vbox, 0, 1, 2, 1);
+
+        Label name = new Label("Masukkan Gmail anda untuk Konfirmasi denda");
+        grid.add(name, 0, 2); // Kolom 0, Baris 1
+        TextField inputName = new TextField();
+        inputName.setPromptText("Enter Alamat Gmail anda");
+        grid.add(inputName, 0, 3,2,1); // Kolom 1, Baris 1
+
+        Button btnSubmit = new Button("KIRIM DENDA");
+        Button btnBack = new Button("BACK");
+        HBox hBBtn = new HBox(10);
+        hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hBBtn.getChildren().addAll(btnBack, btnSubmit);
+        grid.add(hBBtn, 0, 5);
+
+        final Text actionTarget = new Text();
+        actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
+        grid.add(actionTarget, 1, 4);
+
+        btnSubmit.setOnAction(actionEvent -> {
+           System.out.println("CEK GMAIL");
+        });
+
+        btnBack.setOnAction(actionEvent -> {
+            stage.setScene(UIManager.getPreviousLayout());
+        });
+
+        Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
+        stage.setTitle("ADD Mahasiswa MENU");
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void clearArray() {

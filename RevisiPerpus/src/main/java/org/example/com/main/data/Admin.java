@@ -39,6 +39,7 @@ public class Admin extends User implements IMenu {
     private final String adminPassword = "admin";
     private static final ArrayList<Mahasiswa> MAHASISWA_DATA = new ArrayList<>();
     private static final ArrayList<String> mahasiswaList = new ArrayList<>();
+    private ArrayList<Book> borrowedBooks= new ArrayList<>();
 
     public static void logIn(Stage stage) {
         UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
@@ -125,7 +126,6 @@ public class Admin extends User implements IMenu {
         Button btnEditBook = new Button("Ubah Buku");
         Button btnPinjamB = new Button("Pinjam Buku");
         Button btnKembalikanB = new Button("Kembalikan Buku");
-        Button btnUpBook = new Button("Update Peminjaman Buku");
         Button btnDenda = new Button("Denda Buku");
         Button btnLogOut = new Button("Keluar");
 
@@ -211,15 +211,7 @@ public class Admin extends User implements IMenu {
         grid.add(conKembalikanB,3,4);
 
 
-        VBox conUpdateBuku = new VBox(10);
-        Label labelUpdateBuku = new Label("Gunakan menu ini untuk \n    meng-udapte buku");
-        labelUpdateBuku.setId("paragraph");
-        conUpdateBuku.setAlignment(Pos.CENTER);
-        ImageView imgUpdateBuku = new ImageView(new Image(Main.class.getResourceAsStream("img/Update.png")));
-        imgUpdateBuku.setFitWidth(width);
-        imgUpdateBuku.setFitHeight(height);
-        conUpdateBuku.getChildren().addAll(imgUpdateBuku,labelUpdateBuku,btnUpBook);
-        grid.add(conUpdateBuku,4,4);
+
 
         VBox conDenda = new VBox(10);
         Label labelDenda = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
@@ -229,7 +221,7 @@ public class Admin extends User implements IMenu {
         imgDenda.setFitWidth(width);
         imgDenda.setFitHeight(height);
         conDenda.getChildren().addAll(imgDenda,labelDenda,btnDenda);
-        grid.add(conDenda,1,5);
+        grid.add(conDenda,4,4);
 
 
 
@@ -242,7 +234,7 @@ public class Admin extends User implements IMenu {
         imageLogout.setFitHeight(height);
         btnAddBook.getStyleClass().add("btnMenu");
         conLogout.getChildren().addAll(imageLogout,labelLogout,btnLogOut);
-        grid.add(conLogout,2,5);
+        grid.add(conLogout,1,5);
 
 
        
@@ -255,18 +247,18 @@ public class Admin extends User implements IMenu {
 
         btnPinjamB.setOnAction(actionEvent -> {
             // this.pinjamBuku(stage);
-            System.out.println("PINJAM JALAN");
+            // System.out.println("PINJAM JALAN");
+            pinjamBuku(stage);
         });
 
         
         btnKembalikanB.setOnAction(actionEvent -> {
             // this.pinjamBuku(stage);
-            System.out.println("KEMBALIKAN JALAN");
-        });
-
-        btnUpBook.setOnAction(actionEvent -> {
-            // this.pinjamBuku(stage);
-            System.out.println("UP JALAN");
+            // System.out.println("KEMBALIKAN JALAN");
+            // if(this.borrowedBooks.isEmpty())
+                //  alertEmptyBook(stage);
+            // else
+                 returnBooks(stage);
         });
 
         btnDenda.setOnAction(actionEvent -> {
@@ -304,6 +296,10 @@ public class Admin extends User implements IMenu {
             } catch (Exception e) {
                 UIManager.showError(actionTarget, e.getMessage());
             }
+        });
+
+        btnDenda.setOnAction(actionEvent ->{
+            dendaMahasiswa(stage);
         });
 
         btnLogOut.setOnAction(actionEvent -> {
@@ -522,19 +518,28 @@ public class Admin extends User implements IMenu {
             else {
                 try {
                     Book book;
-                    if (categoryValue.equals("Fiksi"))
+                    if (categoryValue.equals("Manajemen"))
                         book = new Fiksi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
-                    else if (categoryValue.equals("Sejarah"))
+                    else if (categoryValue.equals("Novel"))
                         book = new Sejarah(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
-                    else if (categoryValue.equals("NonFiksi"))
+                    else if (categoryValue.equals("Ekonomi"))
                         book = new NonFiksi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
-                    else if (categoryValue.equals("Teknologi"))
+                    else if (categoryValue.equals("Hukum"))
                         book = new Teknologi(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
-                    else if (categoryValue.equals("Sains"))
+                    else if (categoryValue.equals("Sejarah"))
+                        book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                                Integer.parseInt(fieldStock.getText()));
+                    else if (categoryValue.equals("Agama"))
+                        book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                                Integer.parseInt(fieldStock.getText()));
+                    else if (categoryValue.equals("Psikologi"))
+                        book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
+                                Integer.parseInt(fieldStock.getText()));
+                    else if (categoryValue.equals("Teknologi"))
                         book = new Sains(this.generateId(), fieldTitle.getText(), fieldAuthor.getText(),
                                 Integer.parseInt(fieldStock.getText()));
                     else
@@ -875,5 +880,313 @@ public class Admin extends User implements IMenu {
     }
 
 
+    @Override
+    public TableView<PropertyBook> createTableView(ArrayList<Book> arr){
+        TableView<PropertyBook> table = new TableView<>();
+        table.setEditable(false);
+        table.getColumns().clear();
+
+        TableColumn<PropertyBook, String> idCol = new TableColumn<>("Id");
+        TableColumn<PropertyBook, String> titleCol = new TableColumn<>("Title");
+        TableColumn<PropertyBook, String> authorCol = new TableColumn<>("Author");
+        TableColumn<PropertyBook, Integer> durationCol = new TableColumn<>("Duration");
+        TableColumn<PropertyBook, String> categoryCol = new TableColumn<>("Category");
+
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        authorCol.setCellValueFactory(new PropertyValueFactory<>("author"));
+        durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+
+        table.getColumns().addAll(idCol, titleCol, authorCol, durationCol, categoryCol);
+
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10));
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.setAlignment(Pos.CENTER);
+
+        final VBox vbox = new VBox();
+        vbox.setSpacing(8);
+        vbox.setPadding(new Insets(20, 10, 10, 10));
+        vbox.getChildren().addAll(table);
+        gridPane.add(vbox, 0, 0);
+
+        ArrayList<PropertyBook> convertBook = PropertyBook.bookToProperty(arr);
+        final ObservableList<PropertyBook> data = FXCollections.observableArrayList(convertBook);
+        table.setItems(data);
+        return table;
+    }
+
+
+    private static ArrayList<Book> adminBook = new ArrayList<>();
+    private static String[][] tempBook = new String[10][10];
+    private static int numberBorroewd = 0;
+
+    public static ArrayList<Book> getAdminBook() {
+        return adminBook;
+    }
+
+    public ArrayList<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+    public void pinjamBuku(Stage stage){
+        UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10); // Jarak horizontal antar kolom
+        grid.setVgap(10); // Jarak vertikal antar baris
+        grid.setPadding(new Insets(25, 25, 25, 25));
+        Text sceneTitle = new Text("PEMINJAMAN BUKU");
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
+
+        TableView<PropertyBook> table = super.createTableView(getBookList());
+       
+        // TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(table);
+        grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
+
+        Label id = new Label("ID");
+        TextField fieldId = new TextField();
+        fieldId.setPromptText("Enter book Id");
+        grid.add(id,0,2);
+        grid.add(fieldId,1,2);
+
+        Label duration = new Label("Duration");
+        TextField fieldDuration = new TextField();
+        fieldDuration.setPromptText("Enter duration");
+        grid.add(duration,0,3);
+        grid.add(fieldDuration,1,3);
+
+        final Text actionTarget = new Text();
+        actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
+        grid.add(actionTarget, 1, 4);
+
+        HBox hBBtn = new HBox(10);
+        Button btnAdd = new Button("BORROW BOOK");
+        Button btnBack = new Button("BACK");
+        hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hBBtn.getChildren().addAll(btnBack,btnAdd);
+        grid.add(hBBtn,1,5);
+
+        btnAdd.setOnAction(actionEvent -> {
+            if (fieldId.getText().isEmpty() || fieldDuration.getText().isEmpty()) {
+                UIManager.showError(actionTarget, "FIELD CANNOT BE EMPTY");
+                return;
+            }
+
+            Book book = this.searchBookAll(fieldId.getText());
+            if (book == null) {
+                UIManager.showError(actionTarget, "Book with id " + fieldId.getText() + " is not found");
+                return;
+            }
+
+            // if (isBookAvailable(this, fieldId.getText())) {
+            //     UIManager.showError(actionTarget, "BOOK HAS BEEN BORROWED");
+            //     return;
+            // }
+
+            try {
+                if (Integer.parseInt(fieldDuration.getText()) >= 15) {
+                    UIManager.showError(actionTarget, "DURATION MUST BE LOWER THAN 15");
+                    return;
+                }
+                tempBook[numberBorroewd][0] = book.getBookId();
+                tempBook[numberBorroewd][1] = fieldDuration.getText();
+                numberBorroewd++;
+                book.setStock(book.getStock() - 1);
+                UIManager.showSuccess(actionTarget, "BOOK ADDED SUCCESSFULLY");
+            } catch (NumberFormatException e) {
+                UIManager.showError(actionTarget, "INPUT VALID NUMBER DURATION");
+            }
+        });
+        btnBack.setOnAction(actionEvent -> {
+            stage.close();
+            menu(stage);
+        });
+
+        Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
+        stage.setTitle("BORRWED BOOK MENU");
+        stage.setScene(scene);
+        stage.show();
     
+    }
+
+
+    public void returnBooks(Stage stage){
+        UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10); // Jarak horizontal antar kolom
+        grid.setVgap(10); // Jarak vertikal antar baris
+        grid.setPadding(new Insets(25, 25, 25, 25));
+        Text sceneTitle = new Text("MENU KEMBALIKAN BUKU");
+        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
+
+        TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
+        table.getColumns().forEach(column -> {
+            column.setPrefWidth(148);
+        });
+        VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10, 0, 0, 10));
+        vbox.getChildren().addAll(table);
+        grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
+
+        Label note = new Label("Masukkan ID buku yang tersedia pada tabel diatas");
+        TextField fieldId = new TextField();
+        fieldId.setPromptText("Enter book Id");
+        grid.add(note,0,2,5,1);
+        grid.add(fieldId,0,3,4,1);
+
+        final Text actionTarget = new Text();
+        actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
+        grid.add(actionTarget, 0, 4,4,1);
+
+
+        HBox hBBtn = new HBox(10);
+        Button btnReturn = new Button("EDIT BOOK");
+        Button btnBack = new Button("BACK");
+        hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hBBtn.getChildren().addAll(btnBack,btnReturn);
+        grid.add(hBBtn,0,4,1,1);
+
+
+        btnReturn.setOnAction(actionEvent -> {
+            if (fieldId.getText().isEmpty()) {
+                UIManager.showError(actionTarget, "FIELD CANNOT BE EMPTY");
+                return;
+            }
+            Book book = this.searchBookBorrowed(fieldId.getText());
+            if (book == null) {
+                UIManager.showError(actionTarget, "Book with id " + fieldId.getText() + " is not found");
+            }else {
+                this.changeAmountBook(book,fieldId.getText());
+                UIManager.showSuccess(actionTarget,"BOOK RETURNED SCCESSFULLY");
+                stage.close();
+                pinjamBuku(stage);
+            }
+        });
+
+        btnBack.setOnAction(actionEvent -> {
+            stage.close();
+            menu(stage);
+        });
+
+        Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
+        stage.setTitle("CHANGE BOOK MENU");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
+
+    public void dendaMahasiswa(Stage stage) {
+        UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
+        tableMahasiswa.setEditable(true);
+
+        tableMahasiswa.getColumns().clear();
+        TableColumn<Mahasiswa, String> nameCol = new TableColumn<>("Name");
+        TableColumn<Mahasiswa, String> nimCol = new TableColumn<>("NIM");
+        TableColumn<Mahasiswa, String> facultyCol = new TableColumn<>("Faculty");
+        TableColumn<Mahasiswa, String> prodiCol = new TableColumn<>("Program Studi");
+
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nimCol.setCellValueFactory(new PropertyValueFactory<>("nim"));
+        facultyCol.setCellValueFactory(new PropertyValueFactory<>("faculty"));
+        prodiCol.setCellValueFactory(new PropertyValueFactory<>("programStudi"));
+        tableMahasiswa.getColumns().addAll(nameCol, nimCol, facultyCol, prodiCol);
+
+
+        nameCol.setPrefWidth(148);
+        nimCol.setPrefWidth(148);
+        facultyCol.setPrefWidth(148);
+        prodiCol.setPrefWidth(148);
+        
+        Button backBtn = new Button("Back");
+        Button kirimBtn = new Button("Kirim Pesan");
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10));
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.setAlignment(Pos.CENTER);
+
+        // Add VBox with table and label to the GridPane
+        gridPane.add(tableMahasiswa, 0, 0,5,1);
+
+        Label note = new Label("Masukkan ID buku yang tersedia pada tabel diatas");
+        TextField fieldId = new TextField();
+        fieldId.setPromptText("Enter book Id");
+        gridPane.add(note,0,2,5,1);
+        gridPane.add(fieldId,0,3,5,1);
+
+        // Add button to GridPane at bottom right
+        GridPane.setHalignment(backBtn, HPos.RIGHT);
+        gridPane.add(backBtn, 0, 4);
+        // Button kirimBtn = new Button("Kirim Pesan");
+        gridPane.add(kirimBtn, 1, 4);
+        // Create and set the scene
+        Scene scene = new Scene(gridPane, UIManager.getWidth(), UIManager.getHeight());
+        ArrayList<PropertyMahasiswa> convertMahasiswa = PropertyMahasiswa.mahasiswaToProperty(Admin.getMahasiswaData());
+        final ObservableList<PropertyMahasiswa> data = FXCollections.observableArrayList(convertMahasiswa);
+
+        backBtn.setOnAction(e -> {
+            stage.setScene(UIManager.getPreviousLayout());
+        });
+
+        tableMahasiswa.setItems(data);
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
+        try {
+            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
+            e.printStackTrace();
+        }
+        stage.setScene(scene);
+        stage.setTitle("TABLE REGISTERED Mahasiswa");
+        stage.show();
+    }
+    
+
+
+    public Book searchBookBorrowed(String id){
+        for (Book book : this.getBorrowedBooks())
+            if(book.getBookId().equals(id))
+                return book;
+        return null;
+    }
+
+
+    public void changeAmountBook(Book bookBorrowed,String inputId){
+        Book bookAdmin = Admin.searchBookAll(inputId);
+        bookAdmin.setStock(bookAdmin.getStock()+1);
+        Book allBook = Mahasiswa.searchBookAll(inputId);
+        allBook.setStock(allBook.getStock() + 1);
+        this.getBorrowedBooks().remove(bookBorrowed);
+    }
 }
