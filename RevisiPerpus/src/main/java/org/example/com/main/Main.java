@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main extends Application{
+    // Driver class
     public static void main(String[] args) {
         addUser();
         // Admin.sendMail(STYLESHEET_CASPIAN);
@@ -135,9 +136,6 @@ public class Main extends Application{
             mahasiswa.choiceBook(arr[i][0],Integer.parseInt(arr[i][1]));
     }
 
-    public static void addTempBookAdmin(Admin admin, int numberBorrowed, String[][] arr) {
-        for (int i = 0; i < numberBorrowed; i++)
-            admin.choiceBook(arr[i][0],Integer.parseInt(arr[i][1]));
-    }
+
 
 }

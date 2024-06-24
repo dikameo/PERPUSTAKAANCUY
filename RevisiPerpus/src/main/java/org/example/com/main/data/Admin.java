@@ -35,15 +35,22 @@ import javax.mail.internet.MimeMessage;
 
 public class Admin extends User implements IMenu {
     private TableView tableMahasiswa = new TableView<>();
+    private TableView tableBuku = new TableView<>();
     private final String adminUserName = "admin";
     private final String adminPassword = "admin";
     private static final ArrayList<Mahasiswa> MAHASISWA_DATA = new ArrayList<>();
     private static final ArrayList<String> mahasiswaList = new ArrayList<>();
-    private ArrayList<Book> borrowedBooks= new ArrayList<>();
-    private static String[][] tempBook = new String[10][10];
-    private static int numberBorroewd = 0;
-    private static ArrayList<Book> adminBook = new ArrayList<>();
+    private static ArrayList<Book> borrowedBooks= new ArrayList<>();
 
+
+    @Override
+    public void addBook(Book book){
+        borrowedBooks.add(book);
+    }
+
+    public ArrayList<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
     public static void logIn(Stage stage) {
         UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
         GridPane grid = new GridPane();
@@ -127,8 +134,6 @@ public class Admin extends User implements IMenu {
         Button btnDisplayMahasiswa = new Button("Tampilkan Daftar Mahasiswa");
         Button btnDisplayBook = new Button("Tampilkan Daftar Buku");
         Button btnEditBook = new Button("Ubah Buku");
-        Button btnPinjamB = new Button("Pinjam Buku");
-        Button btnKembalikanB = new Button("Kembalikan Buku");
         Button btnDenda = new Button("Denda Buku");
         Button btnLogOut = new Button("Keluar");
 
@@ -192,30 +197,6 @@ public class Admin extends User implements IMenu {
         grid.add(conEditBook,1,4);
 
 
-        // VBox conPinjamBuku = new VBox(10);
-        // Label labelPinjamB = new Label("Gunakan menu ini untuk \n    melakukan peminjaman");
-        // labelPinjamB.setId("paragraph");
-        // conPinjamBuku.setAlignment(Pos.CENTER);
-        // ImageView imgPinjamB = new ImageView(new Image(Main.class.getResourceAsStream("img/Pinjam.png")));
-        // imgPinjamB.setFitWidth(width);
-        // imgPinjamB.setFitHeight(height);
-        // conPinjamBuku.getChildren().addAll(imgPinjamB,labelPinjamB,btnPinjamB);
-        // grid.add(conPinjamBuku,2,4);
-
-        // VBox conKembalikanB = new VBox(10);
-        // Label labelKembalikanB = new Label("Gunakan menu ini untuk \n  mengembalikan buku");
-        // labelKembalikanB.setId("paragraph");
-        // conKembalikanB.setAlignment(Pos.CENTER);
-        // ImageView imgKembalikanB = new ImageView(new Image(Main.class.getResourceAsStream("img/Kembali.png")));
-        // imgKembalikanB.setFitWidth(width);
-        // imgKembalikanB.setFitHeight(height);
-
-        // conKembalikanB.getChildren().addAll(imgKembalikanB,labelKembalikanB,btnKembalikanB);
-        // grid.add(conKembalikanB,3,4);
-
-
-
-
         VBox conDenda = new VBox(10);
         Label labelDenda = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
         labelDenda.setId("paragraph");
@@ -239,27 +220,11 @@ public class Admin extends User implements IMenu {
         conLogout.getChildren().addAll(imageLogout,labelLogout,btnLogOut);
         grid.add(conLogout,3,4);
 
-
-       
-
         final Text actionTarget = new Text();
         actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
         grid.add(actionTarget, 1, 4);
 
         
-        // Mahasiswa admin = new Mahasiswa();
-
-        btnPinjamB.setOnAction(actionEvent -> {
-            pinjamBuku(stage);
-        });
-
-        
-        btnKembalikanB.setOnAction(actionEvent -> {
-            if(this.borrowedBooks.isEmpty())
-                alertEmptyBook(stage);
-            else
-                returnBooks(stage);
-        });
 
         btnDenda.setOnAction(actionEvent -> {
             // this.pinjamBuku(stage);
@@ -340,287 +305,6 @@ public class Admin extends User implements IMenu {
     }
 
 
-
-
-
-
-    public void pinjamBuku(Stage stage){
-        UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10); // Jarak horizontal antar kolom
-        grid.setVgap(10); // Jarak vertikal antar baris
-        grid.setPadding(new Insets(25, 25, 25, 25));
-        Text sceneTitle = new Text("PEMINJAMAN BUKU");
-        sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
-
-        TableView<PropertyBook> table = super.createTableView(getAdminBook());
-        table.getColumns().forEach(column -> {
-            column.setPrefWidth(148);
-        });
-        VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(table);
-        grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
-
-        Label id = new Label("ID");
-        TextField fieldId = new TextField();
-        fieldId.setPromptText("Enter book Id");
-        grid.add(id,0,2);
-        grid.add(fieldId,1,2);
-
-        Label duration = new Label("Duration");
-        TextField fieldDuration = new TextField();
-        fieldDuration.setPromptText("Enter duration");
-        grid.add(duration,0,3);
-        grid.add(fieldDuration,1,3);
-
-        final Text actionTarget = new Text();
-        actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
-        grid.add(actionTarget, 1, 4);
-
-        HBox hBBtn = new HBox(10);
-        Button btnAdd = new Button("BORROW BOOK");
-        Button btnBack = new Button("BACK");
-        hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hBBtn.getChildren().addAll(btnBack,btnAdd);
-        grid.add(hBBtn,1,5);
-
-        btnAdd.setOnAction(actionEvent -> {
-            if (fieldId.getText().isEmpty() || fieldDuration.getText().isEmpty()) {
-                UIManager.showError(actionTarget, "FIELD CANNOT BE EMPTY");
-                return;
-            }
-
-            Book book = this.searchBookAll(fieldId.getText());
-            if (book == null) {
-                UIManager.showError(actionTarget, "Book with id " + fieldId.getText() + " is not found");
-                return;
-            }
-
-            if (isBookAvailable(this, fieldId.getText())) {
-                UIManager.showError(actionTarget, "BOOK HAS BEEN BORROWED");
-                return;
-            }
-
-            try {
-                if (Integer.parseInt(fieldDuration.getText()) >= 7) {
-                    UIManager.showError(actionTarget, "DURATION MUST BE LOWER THAN 7");
-                    return;
-                }
-                tempBook[numberBorroewd][0] = book.getBookId();
-                tempBook[numberBorroewd][1] = fieldDuration.getText();
-                numberBorroewd++;
-                book.setStock(book.getStock() - 1);
-                UIManager.showSuccess(actionTarget, "BOOK ADDED SUCCESSFULLY");
-                keepBooks(stage);
-            } catch (NumberFormatException e) {
-                UIManager.showError(actionTarget, "INPUT VALID NUMBER DURATION");
-            }
-        });
-        btnBack.setOnAction(actionEvent -> {
-            stage.close();
-            menu(stage);
-        });
-
-        Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
-        try {
-            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
-        } catch (NullPointerException e) {
-            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
-            e.printStackTrace();
-        }
-        stage.setTitle("BORRWED BOOK MENU");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-public void returnBooks(Stage stage) {
-    UIManager.setPreviousLayout(stage.getScene());
-    GridPane grid = new GridPane();
-    grid.setAlignment(Pos.CENTER);
-    grid.setHgap(10);
-    grid.setVgap(10);
-    grid.setPadding(new Insets(25, 25, 25, 25));
-    Text sceneTitle = new Text("MENU KEMBALIKAN BUKU");
-    sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-    grid.add(sceneTitle, 0, 0, 2, 1);
-
-    TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
-    table.getColumns().forEach(column -> column.setPrefWidth(148));
-    VBox vbox = new VBox();
-    vbox.setSpacing(5);
-    vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(table);
-    grid.add(vbox, 0, 1, 2, 1);
-
-    Label note = new Label("Masukkan ID buku yang tersedia pada tabel diatas");
-    TextField fieldId = new TextField();
-    fieldId.setPromptText("Enter book Id");
-    grid.add(note, 0, 2, 5, 1);
-    grid.add(fieldId, 0, 3, 4, 1);
-
-    final Text actionTarget = new Text();
-    actionTarget.setWrappingWidth(200);
-    grid.add(actionTarget, 0, 4, 4, 1);
-
-    HBox hBBtn = new HBox(10);
-    Button btnReturn = new Button("KEMBALIKAN BOOK");
-    Button btnBack = new Button("BACK");
-    hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
-    hBBtn.getChildren().addAll(btnBack, btnReturn);
-    grid.add(hBBtn, 0, 4, 1, 1);
-
-    btnReturn.setOnAction(actionEvent -> {
-        if (fieldId.getText().isEmpty()) {
-            UIManager.showError(actionTarget, "FIELD CANNOT BE EMPTY");
-            return;
-        }
-        Book book = this.searchBookBorrowed(fieldId.getText());
-        if (book == null) {
-            UIManager.showError(actionTarget, "Book with id " + fieldId.getText() + " is not found");
-        } else {
-            this.changeAmountBook(book, fieldId.getText());
-            UIManager.showSuccess(actionTarget, "BOOK RETURNED SUCCESSFULLY");
-            stage.close();
-            pinjamBuku(stage);
-        }
-    });
-
-    btnBack.setOnAction(actionEvent -> {
-        stage.close();
-        menu(stage);
-    });
-
-    Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
-    try {
-        scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
-    } catch (NullPointerException e) {
-        System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
-        e.printStackTrace();
-    }
-    stage.setTitle("CHANGE BOOK MENU");
-    stage.setScene(scene);
-    stage.show();
-}
-
-public ArrayList<Book> getBorrowedBooks() {
-    return borrowedBooks;
-}
-
-public Book searchBookBorrowed(String id) {
-    for (Book book : this.getBorrowedBooks())
-        if (book.getBookId().equals(id))
-            return book;
-    return null;
-}
-
-public void changeAmountBook(Book bookBorrowed, String inputId) {
-    Book bookAdmin = Admin.searchBookAll(inputId);
-    bookAdmin.setStock(bookAdmin.getStock() + 1);
-    Book allBook = Mahasiswa.searchBookAll(inputId);
-    allBook.setStock(allBook.getStock() + 1);
-    this.getBorrowedBooks().remove(bookBorrowed);
-}
-
-// private static ArrayList<Book> adminBook = new ArrayList<>();
-public static ArrayList<Book> getAdminBook() {
-    return adminBook;
-}
-
-public boolean isBookAvailable(Admin admin, String id) {
-    boolean isFound = false;
-    for (int i = 0; i < numberBorroewd; i++)
-        if (tempBook[i][0].equals(id)) {
-            isFound = true;
-            break;
-        }
-    Book book = admin.searchBookBorrowed(id);
-    if (book == null && !isFound)
-        return false;
-    return true;
-}
-
-public void keepBooks(Stage stage){
-    UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
-    GridPane grid = new GridPane();
-    grid.setAlignment(Pos.CENTER);
-    grid.setHgap(10); // Jarak horizontal antar kolom
-    grid.setVgap(10); // Jarak vertikal antar baris
-    grid.setPadding(new Insets(25, 25, 25, 25));
-    Text sceneTitle = new Text("APAKAH KAMU INGIN MEMINJAM BUKU INI");
-    sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-    grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
-
-    ArrayList<Book> selectionArr = new ArrayList<>();
-    for (int i = 0; i < numberBorroewd; i++){
-        for (Book book : getBookList()){
-            if(book.getBookId().equals(tempBook[i][0])) {
-                Book newBook = new Book(book.getBookId(),book.getTitle(),book.getAuthor(),book.getStock());
-                newBook.setCategory(book.getCategory());
-                newBook.setDuration(Integer.parseInt(tempBook[i][1]));
-                selectionArr.add(newBook);
-                break;
-            }
-        }
-    }
-    TableView<PropertyBook> table = createTableView(selectionArr);
-    table.getColumns().forEach(column -> {
-        column.setPrefWidth(148);
-    });
-    VBox vbox = new VBox();
-    vbox.setSpacing(5);
-    vbox.setPadding(new Insets(10, 0, 0, 10));
-    vbox.getChildren().addAll(table);
-    grid.add(vbox, 0, 1, 2, 1); // Menambahkan TableView ke GridPane
-
-    HBox hBBtn = new HBox(10);
-    Button btnNo = new Button("NO");
-    Button btnSave = new Button("SAVE");
-    hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
-    hBBtn.getChildren().addAll(btnNo,btnSave);
-    grid.add(hBBtn,1,2);
-
-    final Text actionTarget = new Text();
-    actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
-    grid.add(actionTarget, 1, 3);
-
-    btnSave.setOnAction(actionEvent -> {
-        Main.addTempBookAdmin(this,numberBorroewd,tempBook);
-        UIManager.showSuccess(actionTarget,"BOO HAS BEEN SAVE");
-        // logOut(stage);
-        menu(stage);
-    });
-
-    btnNo.setOnAction(e -> {
-        UIManager.showError(actionTarget,"BOOK DOESNT SAVED");
-        // logOut(stage);
-        menu(stage);
-    });
-
-    Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
-    try {
-        scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
-    } catch (NullPointerException e) {
-        System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
-        e.printStackTrace();
-    }
-    stage.setTitle("VALIDATION MENU");
-    stage.setScene(scene);
-    stage.show();
-}
-
-public void choiceBook(String bookId, int duration) {
-    Book book = Admin.searchBookAll(bookId);
-    Book borrowedBookCopy = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), 1);
-    borrowedBookCopy.setDuration(duration);
-    borrowedBookCopy.setCategory(book.getCategory());
-    this.addBook(borrowedBookCopy);
-    Book bookAdmin = Admin.searchBookAll(bookId);
-    bookAdmin.setStock(bookAdmin.getStock() - 1);
-}
 
 
 
@@ -767,14 +451,14 @@ public void choiceBook(String bookId, int duration) {
         gridPane.setHgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        // Add VBox with table and label to the GridPane
+
         gridPane.add(tableMahasiswa, 0, 0,5,1);
 
-        // Add button to GridPane at bottom right
+      
         GridPane.setHalignment(backBtn, HPos.RIGHT);
         gridPane.add(backBtn, 0, 1);
 
-        // Create and set the scene
+       
         Scene scene = new Scene(gridPane, UIManager.getWidth(), UIManager.getHeight());
         ArrayList<PropertyMahasiswa> convertMahasiswa = PropertyMahasiswa.mahasiswaToProperty(Admin.getMahasiswaData());
         final ObservableList<PropertyMahasiswa> data = FXCollections.observableArrayList(convertMahasiswa);
@@ -784,6 +468,7 @@ public void choiceBook(String bookId, int duration) {
         });
 
         tableMahasiswa.setItems(data);
+
         try {
             scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         } catch (NullPointerException e) {
@@ -983,7 +668,7 @@ public void choiceBook(String bookId, int duration) {
 
         TableView<PropertyBook> table = super.createTableView(getBookList());
        
-        // TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
+       
         table.getColumns().forEach(column -> {
             column.setPrefWidth(148);
         });
@@ -1159,6 +844,9 @@ public void choiceBook(String bookId, int duration) {
         return MAHASISWA_DATA;
     }
 
+
+
+
     public static Book searchBookAll(String id) {
         for (Book book : Admin.getBookList())
             if (book.getBookId().equals(id))
@@ -1166,12 +854,20 @@ public void choiceBook(String bookId, int duration) {
         return null;
     }
 
+    public static Mahasiswa searchMahasiswaAll(String id) {
+        for (Mahasiswa data : getMahasiswaData())
+            if (data.getEmail().equals(id))
+                return data;
+        return null;
+    }
+
+
     public String getAdminPassword() {
         return adminPassword;
     }
 
 
-    public static void sendMail(String message){
+    public static void sendMail(String nama, String Nim, String prodi, String Fakultas, String email){
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
         props.put("mail.smtp.port", "587"); // TLS Port
@@ -1188,9 +884,10 @@ public void choiceBook(String bookId, int duration) {
             }
         });
         // Email details
-        String toEmail = "idikach30@gmail.com"; //pengguna
+        // Book book = searchBookAll(fieldId.getText());
+        String toEmail = email; //pengguna
         String subject = "PERPUSTAKAAN"; 
-        String body = "pesan dari perpus "; //message
+        String body = "Asalamualikum Pesan ini berasal dari PERPUSTAKAAN UMM\nkepada sauadara: "+nama+".\nNIM: "+Nim+"\nProdi: "+prodi+"\nFakultas: "+Fakultas+"\nAnda terlembat untuk mengembalikan buku segara kunjungi kampus terdekat"; //message
 
 
          try {
@@ -1200,7 +897,7 @@ public void choiceBook(String bookId, int duration) {
             msg.addHeader("format", "flowed");
             msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-            msg.setFrom(new InternetAddress(mainEmail, "NoReply-JD"));
+            msg.setFrom(new InternetAddress(mainEmail, "PERPUSTAKAAN UMM"));
             msg.setReplyTo(InternetAddress.parse(mainEmail, false));
             msg.setSubject(subject, "UTF-8");
             msg.setText(body, "UTF-8");
@@ -1212,80 +909,108 @@ public void choiceBook(String bookId, int duration) {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
 
     public void dendaMahasiswa(Stage stage) {
-        UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
+        UIManager.setPreviousLayout(stage.getScene()); // SAVE PREVIOUS SCENE
         tableMahasiswa.setEditable(true);
-
+      
+    
         tableMahasiswa.getColumns().clear();
+
         TableColumn<Mahasiswa, String> nameCol = new TableColumn<>("Name");
         TableColumn<Mahasiswa, String> nimCol = new TableColumn<>("NIM");
         TableColumn<Mahasiswa, String> facultyCol = new TableColumn<>("Faculty");
         TableColumn<Mahasiswa, String> prodiCol = new TableColumn<>("Program Studi");
-
+        TableColumn<Mahasiswa, String> emailCol = new TableColumn<>("Email");
+    
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         nimCol.setCellValueFactory(new PropertyValueFactory<>("nim"));
         facultyCol.setCellValueFactory(new PropertyValueFactory<>("faculty"));
         prodiCol.setCellValueFactory(new PropertyValueFactory<>("programStudi"));
-        tableMahasiswa.getColumns().addAll(nameCol, nimCol, facultyCol, prodiCol);
-
-
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tableMahasiswa.getColumns().addAll(nameCol, nimCol, facultyCol, prodiCol, emailCol);
+    
         nameCol.setPrefWidth(148);
         nimCol.setPrefWidth(148);
         facultyCol.setPrefWidth(148);
         prodiCol.setPrefWidth(148);
-        
+        emailCol.setPrefWidth(148);
+
+
         Button backBtn = new Button("Back");
-        Button kirimBtn = new Button("Kirim Pesan");
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10));
         gridPane.setVgap(10);
         gridPane.setHgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        // Add VBox with table and label to the GridPane
-        gridPane.add(tableMahasiswa, 0, 0,5,1);
-
-        Label note = new Label("Masukkan ID buku yang tersedia pada tabel diatas");
-        TextField fieldId = new TextField();
-        fieldId.setPromptText("Enter book Id");
+        
+        Label note = new Label("Masukkan Email mahasiswa yang tersedia pada tabel diatas");
+        TextField fieldEmail = new TextField();
+        fieldEmail.setPromptText("Enter Email");
         gridPane.add(note,0,2,5,1);
-        gridPane.add(fieldId,0,3,5,1);
-
-        // Add button to GridPane at bottom right
+        gridPane.add(fieldEmail,0,3,5,1);
+        gridPane.add(tableMahasiswa, 0, 0, 5, 1);
         GridPane.setHalignment(backBtn, HPos.RIGHT);
-        gridPane.add(backBtn, 0, 4);
-        // Button kirimBtn = new Button("Kirim Pesan");
-        gridPane.add(kirimBtn, 1, 4);
-        // Create and set the scene
+        gridPane.add(backBtn, 0, 5);
+    
+    
         Scene scene = new Scene(gridPane, UIManager.getWidth(), UIManager.getHeight());
-        ArrayList<PropertyMahasiswa> convertMahasiswa = PropertyMahasiswa.mahasiswaToProperty(Admin.getMahasiswaData());
-        final ObservableList<PropertyMahasiswa> data = FXCollections.observableArrayList(convertMahasiswa);
+  
+         ArrayList<PropertyMahasiswa> convertMahasiswa = PropertyMahasiswa.mahasiswaToProperty(Admin.getMahasiswaData());
+        final ObservableList<PropertyMahasiswa> dataMahasiswa = FXCollections.observableArrayList(convertMahasiswa);
+        tableMahasiswa.setItems(dataMahasiswa);
+        
+        final Text actionTarget = new Text();
+        actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
+        gridPane.add(actionTarget, 0, 4,4,1);
 
-        backBtn.setOnAction(e -> {
-            stage.setScene(UIManager.getPreviousLayout());
+        HBox hBBtn = new HBox(10);
+        Button btnReturn = new Button("EDIT BOOK INFORMATION");
+        Button btnBack = new Button("BACK");
+        hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
+        hBBtn.getChildren().addAll(btnBack, btnReturn);
+        gridPane.add(hBBtn, 0, 5);
+
+
+        btnReturn.setOnAction(actionEvent -> {
+            if (fieldEmail.getText().isEmpty()) {
+                UIManager.showError(actionTarget, "FIELD CANNOT BE EMPTY");
+                return;
+            }
+            Mahasiswa mahasiswa = this.searchMahasiswaAll(fieldEmail.getText());
+            if (mahasiswa == null) {
+                UIManager.showError(actionTarget, "Email " + fieldEmail.getText() + " is not found");
+            } else{
+                System.out.println();
+                UIManager.showSuccess(actionTarget, "PESAN TELAH DIKIRIMKAN");
+                sendMail(mahasiswa.getName(), mahasiswa.getNIM(),mahasiswa.getProgramStudi(),mahasiswa.getFaculty(),mahasiswa.getEmail());
+                
+            }
+
+        });
+        
+
+        btnBack.setOnAction(actionEvent -> {
+            stage.close();
+            menu(stage);
         });
 
-        tableMahasiswa.setItems(data);
         try {
             scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         } catch (NullPointerException e) {
             System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
             e.printStackTrace();
         }
-        try {
-            scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
-        } catch (NullPointerException e) {
-            System.err.println("Error: CSS file not found. Please ensure style.css is in the correct directory.");
-            e.printStackTrace();
-        }
+    
+     
         stage.setScene(scene);
         stage.setTitle("TABLE REGISTERED Mahasiswa");
         stage.show();
     }
     
+
 }
