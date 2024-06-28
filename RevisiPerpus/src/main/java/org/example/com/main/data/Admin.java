@@ -867,7 +867,7 @@ public class Admin extends User implements IMenu {
     }
 
 
-    public static void sendMail(String nama, String Nim, String prodi, String Fakultas, String email){
+    public static void sendMail(String pesan, String email){
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP Host
         props.put("mail.smtp.port", "587"); // TLS Port
@@ -887,9 +887,7 @@ public class Admin extends User implements IMenu {
         // Book book = searchBookAll(fieldId.getText());
         String toEmail = email; //pengguna
         String subject = "PERPUSTAKAAN"; 
-        String body = "Asalamualikum Pesan ini berasal dari PERPUSTAKAAN UMM\nkepada sauadara: "+nama+".\nNIM: "+Nim+"\nProdi: "+prodi+"\nFakultas: "+Fakultas+"\nAnda terlembat untuk mengembalikan buku segara kunjungi kampus terdekat"; //message
-
-
+        String body = pesan;
          try {
             MimeMessage msg = new MimeMessage(session);
             // Set message headers
@@ -969,7 +967,7 @@ public class Admin extends User implements IMenu {
         gridPane.add(actionTarget, 0, 4,4,1);
 
         HBox hBBtn = new HBox(10);
-        Button btnReturn = new Button("EDIT BOOK INFORMATION");
+        Button btnReturn = new Button("Kirimkan laporan");
         Button btnBack = new Button("BACK");
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack, btnReturn);
@@ -987,7 +985,9 @@ public class Admin extends User implements IMenu {
             } else{
                 System.out.println();
                 UIManager.showSuccess(actionTarget, "PESAN TELAH DIKIRIMKAN");
-                sendMail(mahasiswa.getName(), mahasiswa.getNIM(),mahasiswa.getProgramStudi(),mahasiswa.getFaculty(),mahasiswa.getEmail());
+
+                String pesan = "Asalamualaikum Pesan ini berasal dari PERPUSTAKAAN UMM\nkepada sauadara: "+mahasiswa.getName()+".\nNIM: "+mahasiswa.getNIM()+"\nProdi: "+mahasiswa.getProgramStudi()+"\nFakultas: "+mahasiswa.getFaculty()+"\nAnda terlembat untuk mengembalikan buku segara kunjungi kampus terdekat";
+                sendMail(pesan,mahasiswa.getEmail());
                 
             }
 

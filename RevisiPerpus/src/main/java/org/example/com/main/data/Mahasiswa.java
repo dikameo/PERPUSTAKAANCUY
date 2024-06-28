@@ -22,8 +22,12 @@ import org.example.com.main.UI.UIManager;
 import org.example.com.main.books.*;
 import org.example.com.main.util.IMenu;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Optional;
+
+
+import java.awt.Desktop;
 
 public class Mahasiswa extends User implements IMenu {
     private String name,faculty,programStudi,NIM,email;
@@ -115,7 +119,7 @@ public class Mahasiswa extends User implements IMenu {
         Button btnKembalikanB = new Button("Kembalikan Buku");
         Button btnOut = new Button("Pinjam Buku atau Logout");
         Button btnUpBook = new Button("Update Buku");
-        Button btnDenda = new Button("Denda Buku");
+        Button btnLapor = new Button("Lapor Buku");
 
 
         double width = 50; 
@@ -164,16 +168,16 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(conUpdateBuku,1,4);
 
 
-        VBox conDenda = new VBox(10);
-        Label labelDenda = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
-        labelDenda.setId("paragraph");
-        conDenda.setAlignment(Pos.CENTER);
-        ImageView imgDenda = new ImageView(new Image(Main.class.getResourceAsStream("img/Denda.png")));
-        imgDenda.setFitWidth(width);
-        imgDenda.setFitHeight(height);
-        // conDenda.setStyle("-fx-background-color: #D3D3D3;");
-        conDenda.getChildren().addAll(imgDenda,labelDenda,btnDenda);
-        grid.add(conDenda,2,4);
+        VBox conLapor = new VBox(10);
+        Label labelLapor = new Label("Gunakan menu ini untuk \n   melaporkan keluhan");
+        labelLapor.setId("paragraph");
+        conLapor.setAlignment(Pos.CENTER);
+        ImageView imgLapor = new ImageView(new Image(Main.class.getResourceAsStream("img/Denda.png")));
+        imgLapor.setFitWidth(width);
+        imgLapor.setFitHeight(height);
+        // conLapor.setStyle("-fx-background-color: #D3D3D3;");
+        conLapor.getChildren().addAll(imgLapor,labelLapor,btnLapor);
+        grid.add(conLapor,2,4);
 
         VBox conOut = new VBox(10);
         Label labelKeluar = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
@@ -220,17 +224,12 @@ public class Mahasiswa extends User implements IMenu {
         });
 
         btnOut.setOnAction(actionEvent -> {
-            // if (numberBorroewd > 0){
-                // keepBooks(stage);
-            // }else {
                 logOut(stage);
-            // }
         });
 
 
-        btnDenda.setOnAction(actionEvent ->{
-            // System.out.println("denda");
-            displayDenda(stage);
+        btnLapor.setOnAction(actionEvent ->{
+            displayLapor(stage);
         });
 
         Scene scene = new Scene(grid,UIManager.getWidth(), UIManager.getWidth());
@@ -329,6 +328,8 @@ public class Mahasiswa extends User implements IMenu {
     }
 
     public void pinjamBuku(Stage stage){
+
+        
         UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -371,6 +372,17 @@ public class Mahasiswa extends User implements IMenu {
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hBBtn.getChildren().addAll(btnBack,btnAdd);
         grid.add(hBBtn,1,5);
+        String durasi = fieldDuration.getText();
+
+        String pesan = "Asalamualaikum Pesan ini berasal dari PERPUSTAKAAN UMM \n" + 
+                        "kepada sauadara: "+getName()+"\n" +
+                        "NIM: "+getNIM()+"\n" + 
+                        "Prodi: "+getProgramStudi()+"\n" + 
+                        "Fakultas: "+getFaculty()+"\n" + 
+                        "=================================\n"+
+                        "Jangan Lupa untuk mengembalikan Tepat waktu\n"+
+                        "=================================\n";
+
 
         btnAdd.setOnAction(actionEvent -> {
             if (fieldId.getText().isEmpty() || fieldDuration.getText().isEmpty()) {
@@ -400,6 +412,7 @@ public class Mahasiswa extends User implements IMenu {
                 book.setStock(book.getStock() - 1);
                 UIManager.showSuccess(actionTarget, "BOOK ADDED SUCCESSFULLY");
                 keepBooks(stage);
+                Admin.sendMail(pesan, getEmail());
             } catch (NumberFormatException e) {
                 UIManager.showError(actionTarget, "INPUT VALID NUMBER DURATION");
             }
@@ -530,6 +543,16 @@ public class Mahasiswa extends User implements IMenu {
         grid.add(hBBtn,0,4,1,1);
 
 
+        String pesan = "Asalamualaikum Pesan ini berasal dari PERPUSTAKAAN UMM \n" + 
+                        "kepada sauadara: "+getName()+"\n" +
+                        "NIM: "+getNIM()+"\n" + 
+                        "Prodi: "+getProgramStudi()+"\n" + 
+                        "Fakultas: "+getFaculty()+"\n" + 
+                        "=================================\n"+
+                        "Buku telah dikembalikan tepat waktu\n"+
+                        "=================================\n";
+
+
         btnReturn.setOnAction(actionEvent -> {
             if (fieldId.getText().isEmpty()) {
                 UIManager.showError(actionTarget, "FIELD CANNOT BE EMPTY");
@@ -542,6 +565,7 @@ public class Mahasiswa extends User implements IMenu {
                 this.changeAmountBook(book,fieldId.getText());
                 UIManager.showSuccess(actionTarget,"BOOK RETURNED SCCESSFULLY");
                 stage.close();
+                Admin.sendMail(pesan, getEmail());
                 pinjamBuku(stage);
             }
         });
@@ -740,44 +764,40 @@ public class Mahasiswa extends User implements IMenu {
     }
 
 
-    public void displayDenda(Stage stage){
-        UIManager.setPreviousLayout(stage.getScene());// SAVE PRVIOUS SCENE
+    public void displayLapor(Stage stage){
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10); // Jarak horizontal antar kolom
         grid.setVgap(10); // Jarak vertikal antar baris
         grid.setPadding(new Insets(25, 25, 25, 25));
-        Text sceneTitle = new Text("Buku yang terlambat dikembalikan");
+        Text sceneTitle = new Text("Laporkan masalah");
         sceneTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(sceneTitle, 0, 0, 2, 1); // Kolom 0, Baris 0, Colspan 2, Rowspan 1
 
-        TableView<PropertyBook> table = createTableView(this.getBorrowedBooks());
-        table.getColumns().forEach(column -> {
-            column.setPrefWidth(148);
+        // Create the button
+        Button googleButton = new Button("Laporkan kendala");
+        googleButton.setOnAction(e -> {
+            try {
+                Desktop.getDesktop().browse(new URI("https://forms.gle/imu8x7tjDs2Loqhh9"));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
-        VBox vbox = new VBox();
-        vbox.setSpacing(5);
-        vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(table);
-        grid.add(vbox, 0, 1, 2, 1);
-
-        Button btnBack = new Button("BACK");
         HBox hBBtn = new HBox(10);
+        Button btnBack = new Button("BACK");
         hBBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hBBtn.getChildren().addAll(btnBack);
-        grid.add(hBBtn, 0, 5);
+        hBBtn.getChildren().addAll(btnBack,googleButton);
+        grid.add(hBBtn,0,5);
 
-        final Text actionTarget = new Text();
-        actionTarget.setWrappingWidth(200); // Set a fixed width to prevent layout changes
-        grid.add(actionTarget, 1, 4);
 
         btnBack.setOnAction(actionEvent -> {
-            stage.setScene(UIManager.getPreviousLayout());
+            stage.close();
+            menu(stage);
         });
 
-        Scene scene = new Scene(grid, UIManager.getWidth(), UIManager.getHeight());
-        stage.setTitle("ADD Mahasiswa MENU");
+        // Create a scene
+        Scene scene = new Scene(grid,UIManager.getWidth(),UIManager.getHeight());
         try {
             scene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         } catch (NullPointerException e) {
@@ -888,4 +908,8 @@ public class Mahasiswa extends User implements IMenu {
     public String getEmail(){
         return email;
     }
+
+    
+
+    
 }
