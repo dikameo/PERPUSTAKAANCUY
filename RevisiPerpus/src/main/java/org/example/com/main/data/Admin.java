@@ -186,7 +186,7 @@ public class Admin extends User implements IMenu {
         grid.add(conDisplayBook,4,3);
 
         VBox conEditBook = new VBox(10);
-        Label labelEditBook = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        Label labelEditBook = new Label("Gunakan menu ini untuk \nmengedit buku");
         labelEditBook.setId("paragraph");
         conEditBook.setAlignment(Pos.CENTER);
         ImageView imageEditBook = new ImageView(new Image(Main.class.getResourceAsStream("img/Update.png")));
@@ -198,7 +198,7 @@ public class Admin extends User implements IMenu {
 
 
         VBox conDenda = new VBox(10);
-        Label labelDenda = new Label("Gunakan menu ini untuk \n   Keluar dari menu");
+        Label labelDenda = new Label("Gunakan menu ini untuk \n   mengirim email denda");
         labelDenda.setId("paragraph");
         conDenda.setAlignment(Pos.CENTER);
         ImageView imgDenda = new ImageView(new Image(Main.class.getResourceAsStream("img/Denda.png")));
@@ -210,7 +210,7 @@ public class Admin extends User implements IMenu {
 
 
         VBox conLogout = new VBox(10);
-        Label labelLogout = new Label("Gunakan menu ini untuk \nmenambahkan mahasiswa");
+        Label labelLogout = new Label("Gunakan menu ini untuk \nkeluar dari menu");
         labelLogout.setId("paragraph");
         conLogout.setAlignment(Pos.CENTER);
         ImageView imageLogout = new ImageView(new Image(Main.class.getResourceAsStream("img/Kembali.png")));
